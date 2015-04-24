@@ -1,5 +1,7 @@
 from CONSTANTS import *
 
+
+
 class Paddle(pygame.sprite.Sprite):
     def __init__(self, gs=None):
         # initialize
@@ -23,7 +25,7 @@ class Paddle(pygame.sprite.Sprite):
         if self.is_moving_up and not self.is_out_top_bound():
             self.rect.move_ip(0, -PADDLE_SPEED)
         if self.is_moving_down and not self.is_out_bottom_bound():
-            self.rect.move_ip(0, -PADDLE_SPEED)
+            self.rect.move_ip(0, PADDLE_SPEED)
 
     def is_out_left_bound(self):
         return self.rect.left < 0

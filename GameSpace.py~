@@ -1,27 +1,10 @@
-import pygame
-from pygame.locals import QUIT
-from pygame.locals import KEYDOWN
-from pygame.locals import K_LEFT
-from pygame.locals import K_RIGHT
-from pygame.locals import K_UP
-from pygame.locals import K_DOWN
-from pygame.locals import K_RCTRL
-from pygame.locals import K_a
-from pygame.locals import K_d
-from pygame.locals import K_w
-from pygame.locals import K_s
-from pygame.locals import K_LSHIFT
-
 from CONSTANTS import *
-from Brick import Brick
-from Paddle import Paddle
-from Ball import Ball
 
 class GameSpace:
     def main(self):
         # 1 -- initialization
         pygame.init()
-        self.size = self.WIDTH, self.HEIGHT
+        self.size = SCREEN_WIDTH, SCREEN_HEIGHT
         self.screen = pygame.display.set_mode(self.size)
 
         # 2 -- create game objects
@@ -78,7 +61,7 @@ class GameSpace:
                     elif event.key == K_w:
                         self.paddle_2.is_moving_up = False
                     elif event.key == K_s:
-                        self.paddle_2.is_moving_down = False   
+                        self.paddle_2.is_moving_down = False
 
             # 6 -- tick game objects
             self.paddle_1.tick()
@@ -93,3 +76,4 @@ class GameSpace:
                 self.screen.blit(brick.image, brick.rect)
             for ball in self.balls:
                 self.screen.blit(ball.image, ball.rect)
+            self.screen.blit(self.player_1.image, self.player_2.rect)
