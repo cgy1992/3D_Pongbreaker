@@ -1,4 +1,8 @@
+import pygame
+from GameSpace import GameSpace
+
 from CONSTANTS import *
+
 
 class Brick(pygame.sprite.Sprite):
     def __init__(self, color, topleft, gs=None):

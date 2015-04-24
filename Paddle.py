@@ -1,3 +1,6 @@
+import pygame
+from GameSpace import GameSpace
+
 from CONSTANTS import *
 
 class Paddle(pygame.sprite.Sprite):

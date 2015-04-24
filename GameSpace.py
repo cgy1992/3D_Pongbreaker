@@ -1,27 +1,14 @@
 import pygame
-from pygame.locals import QUIT
-from pygame.locals import KEYDOWN
-from pygame.locals import K_LEFT
-from pygame.locals import K_RIGHT
-from pygame.locals import K_UP
-from pygame.locals import K_DOWN
-from pygame.locals import K_RCTRL
-from pygame.locals import K_a
-from pygame.locals import K_d
-from pygame.locals import K_w
-from pygame.locals import K_s
-from pygame.locals import K_LSHIFT
+
+from pygame.locals import *
 
 from CONSTANTS import *
-from Brick import Brick
-from Paddle import Paddle
-from Ball import Ball
 
 class GameSpace:
     def main(self):
         # 1 -- initialization
         pygame.init()
-        self.size = self.WIDTH, self.HEIGHT
+        self.size = SCREEN_WIDTH, SCREEN_HEIGHT
         self.screen = pygame.display.set_mode(self.size)
 
         # 2 -- create game objects
