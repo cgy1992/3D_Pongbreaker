@@ -1,3 +1,12 @@
+# Tim Pusateri
+# Jon Richelsen
+# CSE30332
+# Final Project: PyGame + Twisted
+# 3D_Pongbreaker
+#
+# FUTURE IMPROVEMENTS
+# Have number of brick rows and columns be determined by brick position file
+
 # colors
 COLOR_WHITE = 255, 255, 255
 COLOR_GRAY =  100, 100, 100
@@ -21,15 +30,18 @@ N_BRICK_ROWS = 8
 N_BRICK_COLUMNS = 8
 BRICK_WIDTH = SCREEN_WIDTH / N_BRICK_COLUMNS # pixels
 BRICK_HEIGHT = SCREEN_HEIGHT / N_BRICK_ROWS # pixels
+BRICK_PLANE = HALLWAY_DEPTH / 2 # pixels
 BRICK_COLORS = {
-    'R': COLOR_RED,
-    'B': COLOR_BLUE
+	'R': COLOR_RED,
+	'B': COLOR_BLUE
 }
+BRICK_POS_FN = 'test_brick_pos.txt'
 
 # paddle
 PADDLE_SCALING = 10
 PADDLE_WIDTH = SCREEN_WIDTH / PADDLE_SCALING # pixels
 PADDLE_HEIGHT = SCREEN_HEIGHT / PADDLE_SCALING # pixels
+PADDLE_BUFFER = HALLWAY_DEPTH / 50 # pixels
 PADDLE_SPEED = 10 # pixels/frame
 PADDLE_COLOR = COLOR_WHITE
 PADDLE_ALPHA = 100
