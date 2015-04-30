@@ -83,9 +83,22 @@ class GameSpace:
 
 			# 7 -- display game objects
 			self.screen.fill(COLOR_BLACK)
+
+			# Display hallway outline
+			pygame.draw.aaline(self.screen, COLOR_GREEN, (0, 0), WALL_TOP_LEFT)
+			pygame.draw.aaline(self.screen, COLOR_GREEN, (SCREEN_WIDTH, 0), WALL_TOP_RIGHT)
+			pygame.draw.aaline(self.screen, COLOR_GREEN, (0, SCREEN_HEIGHT), WALL_BOTTOM_LEFT)
+			pygame.draw.aaline(self.screen, COLOR_GREEN, (SCREEN_WIDTH, SCREEN_HEIGHT), WALL_BOTTOM_RIGHT)
+
+			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TR, WALL_OUTLINE_TL)
+			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TR, WALL_OUTLINE_BR)
+			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_BL, WALL_OUTLINE_BR)
+			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TL, WALL_OUTLINE_BL)
+
+
 			self.blit_3D(self.paddle_2.image, self.paddle_2.rect, self.paddle_2.z_pos)
-			#for brick in self.bricks:
-			#	self.blit_3D(brick.image, brick.rect, brick.z_pos)
+			for brick in self.bricks:
+				self.blit_3D(brick.image, brick.rect, brick.z_pos)
 			self.blit_3D(self.paddle_1.image, self.paddle_1.rect, self.paddle_1.z_pos)
 			pygame.display.flip()
 
