@@ -34,7 +34,8 @@ class GameSpace:
 		self.paddle_2 = Paddle(HALLWAY_DEPTH - PADDLE_BUFFER, self)
 		self.bc = BrickCreator(self)
 		self.bricks = self.bc.get_bricks(BRICK_POS_FN)
-		self.ball = Ball(self.paddle_1.rect.center, self.paddle_1.z_pos, BALL_INIT_SPEED, self)
+		# THIS IS A HACK
+		self.ball = Ball(self.paddle_1.rect.center, self.paddle_1.z_pos + 5, BALL_INIT_SPEED, self)
 
 		# 3 -- game loop
 		while True:
@@ -46,15 +47,16 @@ class GameSpace:
 				if event.type == pygame.QUIT:
 					sys.exit()
 				elif event.type == KEYDOWN:
-					if event.key == K_LEFT:
-						self.paddle_1.is_moving_left = True
-					elif event.key == K_RIGHT:
-						self.paddle_1.is_moving_right = True
-					elif event.key == K_UP:
-						self.paddle_1.is_moving_up = True
-					elif event.key == K_DOWN:
-						self.paddle_1.is_moving_down = True
-					elif event.key == K_a:
+#					if event.key == K_LEFT:
+#						self.paddle_1.is_moving_left = True
+#					elif event.key == K_RIGHT:
+#						self.paddle_1.is_moving_right = True
+#					elif event.key == K_UP:
+#						self.paddle_1.is_moving_up = True
+#					elif event.key == K_DOWN:
+#						self.paddle_1.is_moving_down = True
+					# THIS IS A HACK
+					if event.key == K_a:
 						self.paddle_2.is_moving_left = True
 					elif event.key == K_d:
 						self.paddle_2.is_moving_right = True
@@ -63,15 +65,16 @@ class GameSpace:
 					elif event.key == K_s:
 						self.paddle_2.is_moving_down = True
 				elif event.type == KEYUP:
-					if event.key == K_LEFT:
-						self.paddle_1.is_moving_left = False
-					elif event.key == K_RIGHT:
-						self.paddle_1.is_moving_right = False
-					elif event.key == K_UP:
-						self.paddle_1.is_moving_up = False
-					elif event.key == K_DOWN:
-						self.paddle_1.is_moving_down = False
-					elif event.key == K_a:
+#					if event.key == K_LEFT:
+#						self.paddle_1.is_moving_left = False
+#					elif event.key == K_RIGHT:
+#						self.paddle_1.is_moving_right = False
+#					elif event.key == K_UP:
+#						self.paddle_1.is_moving_up = False
+#					elif event.key == K_DOWN:
+#						self.paddle_1.is_moving_down = False
+					# THIS IS A HACK
+					if event.key == K_a:
 						self.paddle_2.is_moving_left = False
 					elif event.key == K_d:
 						self.paddle_2.is_moving_right = False
@@ -81,8 +84,8 @@ class GameSpace:
 						self.paddle_2.is_moving_down = False
 
 			# 6 -- tick game objects
-			self.paddle_2.tick()
 			self.paddle_1.tick()
+			self.paddle_2.tick()
 			self.ball.tick()
 
 			# 7 -- display game objects
@@ -99,12 +102,12 @@ class GameSpace:
 			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_BL, WALL_OUTLINE_BR)
 			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TL, WALL_OUTLINE_BL)
 
-
-			self.blit_3D(self.paddle_2.image, self.paddle_2.rect, self.paddle_2.z_pos)
-			for brick in self.bricks:
-				self.blit_3D(brick.image, brick.rect, brick.z_pos)
-			self.blit_3D(self.paddle_1.image, self.paddle_1.rect, self.paddle_1.z_pos)
-			self.blit_3D(self.ball.image, self.ball.rect, self.ball.z_pos)
+			all_sprites = [self.paddle_1, self.paddle_2, self.ball]
+			all_sprites.extend(self.bricks)
+			all_sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
+			
+			for sprite in all_sprites:
+				self.blit_3D(sprite.image, sprite.rect, sprite.z_pos)
 			pygame.display.flip()
 
 	def blit_3D(self, orig_image, orig_rect, z_pos):

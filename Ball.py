@@ -16,13 +16,17 @@ class Ball(pygame.sprite.Sprite):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
-		self.image = pygame.Surface([(BALL_RADIUS * 2), (BALL_RADIUS * 2)])
-		self.rect = pygame.draw.circle(self.image, BALL_COLOR, center, BALL_RADIUS)
+#		self.image = pygame.Surface(((BALL_RADIUS * 2), (BALL_RADIUS * 2)))
+#		self.rect = pygame.draw.circle(self.image, (155, 155, 155), center, BALL_RADIUS)
+		self.image = pygame.Surface(((BALL_RADIUS * 2), (BALL_RADIUS * 2)))
+		self.image.fill(BALL_COLOR)
+		self.rect = self.image.get_rect()
+		self.rect.center = (SCREEN_CENTER_X, SCREEN_CENTER_Y)
 		self.z_pos = z_pos
 
 		# properties
-		self.x_vel = 0.25 * z_init_vel
-		self.y_vel = 0.6 * z_init_vel
+		self.x_vel = 0.65 * z_init_vel
+		self.y_vel = 0.75 * z_init_vel
 		self.z_vel = z_init_vel
 
 	def tick(self):
@@ -38,10 +42,13 @@ class Ball(pygame.sprite.Sprite):
 		for brick in list(self.gs.bricks):
 			if self.colliderect_3D(brick):
 				self.z_vel *= -1
-				self.gs.brick.remove(brick)
+				self.gs.bricks.remove(brick)
 		# move ball
 		self.rect.move_ip(self.x_vel, self.y_vel)
 		self.z_pos += self.z_vel
+		# set alert (HACK) if ball leaves hallway
+		if self.z_pos < 0 or self.z_pos > HALLWAY_DEPTH:
+			del self.gs.ball
 
 	def colliderect_3D(self, other):
 		return ((self.z_pos <= other.z_pos and (self.z_pos + self.z_vel) >= other.z_pos) or (self.z_pos >= other.z_pos and (self.z_pos + self.z_vel) <= other.z_pos)) and self.rect.colliderect(other.rect)		
