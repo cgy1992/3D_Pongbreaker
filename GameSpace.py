@@ -23,6 +23,7 @@ class GameSpace:
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
+		pygame.display.set_caption("3D Pong Breaker")
 		self.clock = pygame.time.Clock()
 
 		# 2 -- create game objects
