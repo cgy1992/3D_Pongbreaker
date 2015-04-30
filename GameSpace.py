@@ -108,6 +108,8 @@ class GameSpace:
 			
 			for sprite in all_sprites:
 				self.blit_3D(sprite.image, sprite.rect, sprite.z_pos)
+
+			self.display_ball_outline()
 			pygame.display.flip()
 
 	def blit_3D(self, orig_image, orig_rect, z_pos):
@@ -127,3 +129,16 @@ class GameSpace:
 		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)		
 
 		self.screen.blit(scaled_image, scaled_rect)
+
+	def display_ball_outline(self):
+		self.OUTLINE_WIDTH = SCREEN_WIDTH * pow(SCALING_FACTOR, self.ball.z_pos) # pixels
+		self.OUTLINE_HEIGHT = SCREEN_HEIGHT * pow(SCALING_FACTOR, self.ball.z_pos) # pixels
+
+		self.OUTLINE_TR = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2 + self.OUTLINE_WIDTH, (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 # pixels
+		self.OUTLINE_TL = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2,(SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 # pixels
+		self.OUTLINE_BL = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2, (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 + self.OUTLINE_HEIGHT # pixels
+		self.OUTLINE_BR = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2 + self.OUTLINE_WIDTH , (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 + self.OUTLINE_HEIGHT
+
+		self.pointlist = self.OUTLINE_TL, self.OUTLINE_TR, self.OUTLINE_BR, self.OUTLINE_BL
+
+		pygame.draw.polygon(self.screen, (0, 100, 0), self.pointlist, 3)
