@@ -103,7 +103,8 @@ class GameSpace:
 			pygame.display.flip()
 
 	def blit_3D(self, orig_image, orig_rect, z_pos):
-		scale = float(SCREEN_FACTOR) / z_pos
+		#scale = float(SCALING_FACTOR) / z_pos
+		scale = pow(SCALING_FACTOR, z_pos)
 
 		# resize image
 		scaled_image_width = orig_image.get_size()[0] * scale

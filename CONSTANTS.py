@@ -8,23 +8,23 @@
 # Have number of brick rows and columns be determined by brick position file
 
 # colors
-COLOR_WHITE = 255, 255, 255
-COLOR_GRAY =  100, 100, 100
-COLOR_BLACK = 0,   0,   0
-COLOR_RED =   255, 0,   0
-COLOR_GREEN = 0,   255, 0
-COLOR_BLUE =  0,   0,   255
+COLOR_WHITE = (255, 255, 255)
+COLOR_GRAY =  (100, 100, 100)
+COLOR_BLACK = (0,   0,   0)
+COLOR_RED =   (255, 0,   0)
+COLOR_GREEN = (0,   255, 0)
+COLOR_BLUE =  (0,   0,   255)
 
 # screen
 SCREEN_WIDTH = 800  # pixels
 SCREEN_HEIGHT = 800 # pixels
-SCREEN_CENTER_X = SCREEN_WIDTH / 2
-SCREEN_CENTER_Y = SCREEN_HEIGHT / 2
-SCREEN_FACTOR = 200
+SCREEN_CENTER_X = SCREEN_WIDTH / 2 # pixels
+SCREEN_CENTER_Y = SCREEN_HEIGHT / 2 # pixels
+SCALING_FACTOR = 0.9995 # 'a' in 'y = a^x', where x is distance from screen (pixels) and y is scaling factor
 FRAMERATE = 60 # frames/second
 
 # hallway
-HALLWAY_DEPTH = 1600 # pixels
+HALLWAY_DEPTH = 3200 # pixels
 HALLWAY_COLOR = COLOR_BLACK
 HALLWAY_EDGE_COLOR = COLOR_GREEN
 
