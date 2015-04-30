@@ -6,6 +6,8 @@
 #
 # FUTURE IMPROVEMENTS
 
+import time
+
 import pygame
 from pygame.locals import *
 
@@ -40,5 +42,22 @@ class GameSpace:
 			# 7 -- display game objects
 			self.screen.fill(COLOR_BLACK)
 			for brick in self.bricks:
-				self.screen.blit(brick.image, brick.rect)
+				self.blit_3D(brick.image, brick.rect, brick.z)
 			pygame.display.flip()
+
+	def blit_3D(self, orig_image, orig_rect, z_pos):
+		scale = float(SCREEN_FACTOR) / z_pos
+
+		# resize image
+		scaled_image_width = orig_image.get_size()[0] * scale
+		scaled_image_height = orig_image.get_size()[1] * scale
+		scaled_image = pygame.transform.scale(orig_image, (int(scaled_image_width), int(scaled_image_height)))
+
+		# realign center of rectangle
+		rect_screen_diff_x = orig_rect.centerx - SCREEN_CENTER_X
+		rect_screen_diff_y = orig_rect.centery - SCREEN_CENTER_Y
+		scaled_rect = scaled_image.get_rect()
+		scaled_rect.centerx = SCREEN_CENTER_X + (rect_screen_diff_x * scale)
+		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)		
+
+		self.screen.blit(scaled_image, scaled_rect)
