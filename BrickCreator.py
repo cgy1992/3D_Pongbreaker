@@ -6,8 +6,7 @@
 #
 # FUTURE IMPROVEMENTS
 # Have number of brick rows and columns be determined by brick position file
-# Use file to read brick color
-# Use file to determine whether brick should exist
+# Multiple walls per file
 
 import re
 import string
@@ -19,33 +18,27 @@ from CONSTANTS import *
 class BrickCreator:
 	def __init__(self, gs=None):
 		self.gs = gs
-
-		# regex to match one row of bricks
 		self.brick_line_RE = '(' + "|".join(BRICK_COLORS) + '| ){' + str(N_BRICK_COLUMNS) + '}'
-
-		# regex to match one wall of bricks
 		self.brick_wall_RE = self.brick_line_RE + "(\n" + self.brick_line_RE + '){' + str(N_BRICK_ROWS - 1) + '}'
-
-		# regex to match entire brick file
 		self.brick_pos_file_RE = '^' + self.brick_wall_RE + "(\n\n" + self.brick_wall_RE + ')*$'
 
 	def get_bricks(self, brick_pos_fn):
 		if not self.verify_brickfile(brick_pos_fn):
 			print 'BrickCreator: brick position file incorrectly formatted'
-			sys.quit()
+			sys.exit()
 
 		bricks = list()
 		brick_UL_x_poses = [BRICK_WIDTH * number for number in xrange(N_BRICK_COLUMNS)]
 		brick_UL_y_poses = [BRICK_HEIGHT * number for number in xrange(N_BRICK_ROWS)]
 
-		for brick_UL_y_pos in brick_UL_y_poses:
-			for brick_UL_x_pos in brick_UL_x_poses:
-				bricks.append(Brick('R', (brick_UL_x_pos, brick_UL_y_pos), BRICK_PLANE, self.gs))
+		with open(brick_pos_fn, 'r') as brick_pos_f:
+			brick_pos_ls = brick_pos_f.readlines()
+			for row in xrange(N_BRICK_ROWS):
+				for col in xrange(N_BRICK_COLUMNS):
+					if brick_pos_ls[row][col] != ' ':
+						bricks.append(Brick(brick_pos_ls[row][col], (brick_UL_x_poses[col], brick_UL_y_poses[row]), BRICK_PLANE, self.gs))
 		return bricks
 
 	def verify_brickfile(self, brick_pos_fn):
-		with open (brick_pos_fn, 'r') as brick_pos_f:
-			brick_pos_d = brick_pos_f.read()
-			if not re.match(self.brick_pos_file_RE, brick_pos_d):
-				return False
-		return True
+		with open(brick_pos_fn, 'r') as brick_pos_f:
+			return re.match(self.brick_pos_file_RE, brick_pos_f.read())
