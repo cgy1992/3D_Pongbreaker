@@ -11,7 +11,7 @@ import pygame
 from CONSTANTS import *
 
 class Brick(pygame.sprite.Sprite):
-	def __init__(self, color, topleft, z, gs):
+	def __init__(self, color, topleft, z_pos, gs):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
@@ -19,4 +19,4 @@ class Brick(pygame.sprite.Sprite):
 		self.image.fill(BRICK_COLORS[color])
 		self.rect = self.image.get_rect()
 		self.rect.topleft = topleft
-		self.z = z
+		self.z_pos = z_pos

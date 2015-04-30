@@ -6,12 +6,13 @@
 #
 # FUTURE IMPROVEMENTS
 
-import time
+import sys
 
 import pygame
 from pygame.locals import *
 
 from BrickCreator import BrickCreator
+from Paddle import Paddle
 from Brick import Brick
 from CONSTANTS import *
 
@@ -27,8 +28,10 @@ class GameSpace:
 		# create background surface with black color
 		# blit green rectangle (function of hall_length) onto background surface
 		# blit hallway corners onto hallway surface
+		self.paddle_2 = Paddle(HALLWAY_DEPTH - PADDLE_BUFFER, self)
 		self.bc = BrickCreator(self)
 		self.bricks = self.bc.get_bricks(BRICK_POS_FN)
+		self.paddle_1 = Paddle(PADDLE_BUFFER, self)
 
 		# 3 -- game loop
 		while True:
@@ -36,13 +39,54 @@ class GameSpace:
 			self.clock.tick(FRAMERATE)
 
 			# 5 -- handle user inputs
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					sys.exit()
+				elif event.type == KEYDOWN:
+					if event.key == K_LEFT:
+						self.paddle_1.is_moving_left = True
+					elif event.key == K_RIGHT:
+						self.paddle_1.is_moving_right = True
+					elif event.key == K_UP:
+						self.paddle_1.is_moving_up = True
+					elif event.key == K_DOWN:
+						self.paddle_1.is_moving_down = True
+					elif event.key == K_a:
+						self.paddle_2.is_moving_left = True
+					elif event.key == K_d:
+						self.paddle_2.is_moving_right = True
+					elif event.key == K_w:
+						self.paddle_2.is_moving_up = True
+					elif event.key == K_s:
+						self.paddle_2.is_moving_down = True
+				elif event.type == KEYUP:
+					if event.key == K_LEFT:
+						self.paddle_1.is_moving_left = False
+					elif event.key == K_RIGHT:
+						self.paddle_1.is_moving_right = False
+					elif event.key == K_UP:
+						self.paddle_1.is_moving_up = False
+					elif event.key == K_DOWN:
+						self.paddle_1.is_moving_down = False
+					elif event.key == K_a:
+						self.paddle_2.is_moving_left = False
+					elif event.key == K_d:
+						self.paddle_2.is_moving_right = False
+					elif event.key == K_w:
+						self.paddle_2.is_moving_up = False
+					elif event.key == K_s:
+						self.paddle_2.is_moving_down = False
 
 			# 6 -- tick game objects
+			self.paddle_2.tick()
+			self.paddle_1.tick()
 
 			# 7 -- display game objects
 			self.screen.fill(COLOR_BLACK)
-			for brick in self.bricks:
-				self.blit_3D(brick.image, brick.rect, brick.z)
+			self.blit_3D(self.paddle_2.image, self.paddle_2.rect, self.paddle_2.z_pos)
+			#for brick in self.bricks:
+			#	self.blit_3D(brick.image, brick.rect, brick.z_pos)
+			self.blit_3D(self.paddle_1.image, self.paddle_1.rect, self.paddle_1.z_pos)
 			pygame.display.flip()
 
 	def blit_3D(self, orig_image, orig_rect, z_pos):
