@@ -51,7 +51,7 @@ class GameSpace:
 			# 6 -- tick game objects
 			self.paddle_1.tick()
 			self.paddle_2.tick()
-			for ball in self.balls:
+			for ball in set(self.balls):
 				ball.tick()
 
 			# 7 -- display game objects

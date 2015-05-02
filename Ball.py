@@ -53,7 +53,7 @@ class Ball(pygame.sprite.Sprite):
 			self.x_vel = paddle_vel[0] * PADDLE_TRANSFER_FRAC
 			self.y_vel = paddle_vel[1] * PADDLE_TRANSFER_FRAC
 		# reverse z direction and delete brick if ball is touching (or will touch) any brick
-		for brick in list(self.gs.bricks):
+		for brick in set(self.gs.bricks):
 			if self.colliderect_3D(brick):
 				self.z_vel *= -1
 				self.gs.bricks.remove(brick)
