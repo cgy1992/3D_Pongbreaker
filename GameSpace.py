@@ -5,6 +5,7 @@
 # 3D_Pongbreaker
 #
 # FUTURE IMPROVEMENTS
+# Create set of balls with smart launching
 
 import sys
 
@@ -23,13 +24,11 @@ class GameSpace:
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
-		pygame.display.set_caption("3D Pong Breaker")
+		pygame.display.set_caption("3D Pongbreaker")
 		self.clock = pygame.time.Clock()
 
 		# 2 -- create game objects
-		# create background surface with black color
-		# blit green rectangle (function of hall_length) onto background surface
-		# blit hallway corners onto hallway surface
+		self.background = self.create_background()
 		self.paddle_1 = Paddle(PADDLE_BUFFER, self)
 		self.paddle_2 = Paddle(HALLWAY_DEPTH - PADDLE_BUFFER, self)
 		self.bc = BrickCreator(self)
@@ -89,18 +88,9 @@ class GameSpace:
 			self.ball.tick()
 
 			# 7 -- display game objects
-			self.screen.fill(COLOR_BLACK)
+			self.screen.blit(self.background, (0, 0))
 
-			# Display hallway outline
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (0, 0), WALL_TOP_LEFT)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (SCREEN_WIDTH, 0), WALL_TOP_RIGHT)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (0, SCREEN_HEIGHT), WALL_BOTTOM_LEFT)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (SCREEN_WIDTH, SCREEN_HEIGHT), WALL_BOTTOM_RIGHT)
-
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TR, WALL_OUTLINE_TL)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TR, WALL_OUTLINE_BR)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_BL, WALL_OUTLINE_BR)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TL, WALL_OUTLINE_BL)
+			
 
 			all_sprites = [self.paddle_1, self.paddle_2, self.ball]
 			all_sprites.extend(self.bricks)
@@ -111,6 +101,19 @@ class GameSpace:
 
 			self.display_ball_outline()
 			pygame.display.flip()
+
+	def create_background(self):
+		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+		# draw wall edges
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (0, 0), WALL_TL)
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (SCREEN_WIDTH, 0), WALL_TR)
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (0, SCREEN_HEIGHT), WALL_BL)
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (SCREEN_WIDTH, SCREEN_HEIGHT), WALL_BR)
+		# draw back wall
+		back_wall_pl = [WALL_TL, WALL_TR, WALL_BR, WALL_BL]
+		pygame.draw.polygon(background, HALLWAY_EDGE_COLOR, back_wall_pl, HALLWAY_EDGE_THICK)
+
+		return background
 
 	def blit_3D(self, orig_image, orig_rect, z_pos):
 		#scale = float(SCALING_FACTOR) / z_pos
