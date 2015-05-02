@@ -5,6 +5,7 @@
 # 3D_Pongbreaker
 #
 # FUTURE IMPROVEMENTS
+# Better ball launching (quick mouse clicks not detected)
 
 import sys
 
@@ -23,19 +24,24 @@ class GameSpace:
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
-		pygame.display.set_caption("3D Pong Breaker")
+		pygame.display.set_caption("3D Pongbreaker")
 		self.clock = pygame.time.Clock()
 
 		# 2 -- create game objects
-		# create background surface with black color
-		# blit green rectangle (function of hall_length) onto background surface
-		# blit hallway corners onto hallway surface
+		self.background = self.create_background()
 		self.paddle_1 = Paddle(PADDLE_BUFFER, self)
 		self.paddle_2 = Paddle(HALLWAY_DEPTH - PADDLE_BUFFER, self)
 		self.bc = BrickCreator(self)
 		self.bricks = self.bc.get_bricks(BRICK_POS_FN)
-		# THIS IS A HACK
-		self.ball = Ball(self.paddle_1.rect.center, self.paddle_1.z_pos + 5, BALL_INIT_SPEED, self)
+		self.balls = set()
+		self.balls.add(Ball(1, self))
+		self.balls.add(Ball(2, self))
+		self.title_font = pygame.font.Font(None, TITLE_FONT_SIZE)
+		self.paddle_1_title_text = self.title_font.render('Player 1', False, TEXT_COLOR)
+		self.paddle_2_title_text = self.title_font.render('Player 2', False, TEXT_COLOR)
+		self.paddle_1_title_rect = self.paddle_1_title_text.get_rect()
+		self.paddle_2_title_rect = self.paddle_2_title_text.get_rect()
+		self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
 
 		# 3 -- game loop
 		while True:
@@ -46,99 +52,87 @@ class GameSpace:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					sys.exit()
-				elif event.type == KEYDOWN:
-#					if event.key == K_LEFT:
-#						self.paddle_1.is_moving_left = True
-#					elif event.key == K_RIGHT:
-#						self.paddle_1.is_moving_right = True
-#					elif event.key == K_UP:
-#						self.paddle_1.is_moving_up = True
-#					elif event.key == K_DOWN:
-#						self.paddle_1.is_moving_down = True
-					# THIS IS A HACK
-					if event.key == K_a:
-						self.paddle_2.is_moving_left = True
-					elif event.key == K_d:
-						self.paddle_2.is_moving_right = True
-					elif event.key == K_w:
-						self.paddle_2.is_moving_up = True
-					elif event.key == K_s:
-						self.paddle_2.is_moving_down = True
-				elif event.type == KEYUP:
-#					if event.key == K_LEFT:
-#						self.paddle_1.is_moving_left = False
-#					elif event.key == K_RIGHT:
-#						self.paddle_1.is_moving_right = False
-#					elif event.key == K_UP:
-#						self.paddle_1.is_moving_up = False
-#					elif event.key == K_DOWN:
-#						self.paddle_1.is_moving_down = False
-					# THIS IS A HACK
-					if event.key == K_a:
-						self.paddle_2.is_moving_left = False
-					elif event.key == K_d:
-						self.paddle_2.is_moving_right = False
-					elif event.key == K_w:
-						self.paddle_2.is_moving_up = False
-					elif event.key == K_s:
-						self.paddle_2.is_moving_down = False
+				elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+					self.paddle_1.launch = True
+					self.paddle_2.launch = True
+				elif event.type == MOUSEBUTTONUP and event.button == 1:
+					self.paddle_1.launch = False
+					self.paddle_2.launch = False
 
-			# 6 -- tick game objects
+			# 6 -- tick/update game objects
 			self.paddle_1.tick()
 			self.paddle_2.tick()
-			self.ball.tick()
+			for ball in set(self.balls):
+				ball.tick()
 
 			# 7 -- display game objects
-			self.screen.fill(COLOR_BLACK)
+			self.screen.blit(self.background, (0, 0))
 
-			# Display hallway outline
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (0, 0), WALL_TOP_LEFT)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (SCREEN_WIDTH, 0), WALL_TOP_RIGHT)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (0, SCREEN_HEIGHT), WALL_BOTTOM_LEFT)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, (SCREEN_WIDTH, SCREEN_HEIGHT), WALL_BOTTOM_RIGHT)
+			sprites = [self.paddle_1, self.paddle_2]
+			sprites.extend(self.bricks)
+			sprites.extend(self.balls)
+			sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
+			for sprite in sprites:
+				self.blit_3D(sprite)
 
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TR, WALL_OUTLINE_TL)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TR, WALL_OUTLINE_BR)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_BL, WALL_OUTLINE_BR)
-			pygame.draw.aaline(self.screen, COLOR_GREEN, WALL_OUTLINE_TL, WALL_OUTLINE_BL)
+			for ball in self.balls:
+				self.display_ball_trace(ball)
 
-			all_sprites = [self.paddle_1, self.paddle_2, self.ball]
-			all_sprites.extend(self.bricks)
-			all_sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
-			
-			for sprite in all_sprites:
-				self.blit_3D(sprite.image, sprite.rect, sprite.z_pos)
+			# create score texts and rects
+			paddle_1_score_text = self.score_font.render(str(self.paddle_1.score), False, TEXT_COLOR)
+			paddle_2_score_text = self.score_font.render(str(self.paddle_2.score), False, TEXT_COLOR)
+			paddle_1_score_rect = paddle_1_score_text.get_rect()
+			paddle_2_score_rect = paddle_2_score_text.get_rect()
+			# align title and score rects
+			paddle_1_score_rect.bottomleft = (0, SCREEN_HEIGHT)
+			paddle_2_score_rect.bottomright = (SCREEN_WIDTH, SCREEN_HEIGHT)
+			self.paddle_1_title_rect.bottomleft = paddle_1_score_rect.topleft
+			self.paddle_2_title_rect.bottomright = paddle_2_score_rect.topright
+			# blit titles and scores
+			self.screen.blit(self.paddle_1_title_text, self.paddle_1_title_rect)
+			self.screen.blit(self.paddle_2_title_text, self.paddle_2_title_rect)
+			self.screen.blit(paddle_1_score_text, paddle_1_score_rect)
+			self.screen.blit(paddle_2_score_text, paddle_2_score_rect)
 
-			self.display_ball_outline()
 			pygame.display.flip()
 
-	def blit_3D(self, orig_image, orig_rect, z_pos):
-		#scale = float(SCALING_FACTOR) / z_pos
-		scale = pow(SCALING_FACTOR, z_pos)
+	def create_background(self):
+		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+		# draw wall edges
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (0, 0), WALL_TL)
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (SCREEN_WIDTH, 0), WALL_TR)
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (0, SCREEN_HEIGHT), WALL_BL)
+		pygame.draw.aaline(background, HALLWAY_EDGE_COLOR, (SCREEN_WIDTH, SCREEN_HEIGHT), WALL_BR)
+		# draw back wall
+		back_wall_pl = [WALL_TL, WALL_TR, WALL_BR, WALL_BL]
+		pygame.draw.polygon(background, HALLWAY_EDGE_COLOR, back_wall_pl, HALLWAY_EDGE_THICK)
 
+		return background
+
+	def blit_3D(self, sprite):
+		scale = pow(SCALING_FACTOR, sprite.z_pos)
 		# resize image
-		scaled_image_width = orig_image.get_size()[0] * scale
-		scaled_image_height = orig_image.get_size()[1] * scale
-		scaled_image = pygame.transform.scale(orig_image, (int(scaled_image_width), int(scaled_image_height)))
-
+		scaled_image_width = sprite.image.get_size()[0] * scale
+		scaled_image_height = sprite.image.get_size()[1] * scale
+		scaled_image = pygame.transform.scale(sprite.image, (int(scaled_image_width), int(scaled_image_height)))
 		# realign center of rectangle
-		rect_screen_diff_x = orig_rect.centerx - SCREEN_CENTER_X
-		rect_screen_diff_y = orig_rect.centery - SCREEN_CENTER_Y
+		rect_screen_diff_x = sprite.rect.centerx - SCREEN_CENTER_X
+		rect_screen_diff_y = sprite.rect.centery - SCREEN_CENTER_Y
 		scaled_rect = scaled_image.get_rect()
 		scaled_rect.centerx = SCREEN_CENTER_X + (rect_screen_diff_x * scale)
-		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)		
+		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)
 
 		self.screen.blit(scaled_image, scaled_rect)
 
-	def display_ball_outline(self):
-		self.OUTLINE_WIDTH = SCREEN_WIDTH * pow(SCALING_FACTOR, self.ball.z_pos) # pixels
-		self.OUTLINE_HEIGHT = SCREEN_HEIGHT * pow(SCALING_FACTOR, self.ball.z_pos) # pixels
-
-		self.OUTLINE_TR = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2 + self.OUTLINE_WIDTH, (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 # pixels
-		self.OUTLINE_TL = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2,(SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 # pixels
-		self.OUTLINE_BL = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2, (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 + self.OUTLINE_HEIGHT # pixels
-		self.OUTLINE_BR = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2 + self.OUTLINE_WIDTH , (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 + self.OUTLINE_HEIGHT
-
-		self.pointlist = self.OUTLINE_TL, self.OUTLINE_TR, self.OUTLINE_BR, self.OUTLINE_BL
-
-		pygame.draw.polygon(self.screen, (0, 100, 0), self.pointlist, 3)
+	def display_ball_trace(self, ball):
+		# calculate trace dimensions
+		trace_width = SCREEN_WIDTH * pow(SCALING_FACTOR, ball.z_pos)
+		trace_height = SCREEN_HEIGHT * pow(SCALING_FACTOR, ball.z_pos)
+		# calculate trace corners
+		trace_tl = (((SCREEN_WIDTH - trace_width) / 2), ((SCREEN_HEIGHT - trace_height) / 2))
+		trace_tr = (((SCREEN_WIDTH - trace_width) / 2 + trace_width), ((SCREEN_HEIGHT - trace_height) / 2))
+		trace_bl = (((SCREEN_WIDTH - trace_width) / 2), ((SCREEN_HEIGHT - trace_height) / 2 + trace_height))
+		trace_br = (((SCREEN_WIDTH - trace_width) / 2 + trace_width), ((SCREEN_HEIGHT - trace_height) / 2 + trace_height))
+		# draw trace
+		trace_pl = [trace_tl, trace_tr, trace_br, trace_bl]
+		pygame.draw.polygon(self.screen, HALLWAY_EDGE_COLOR, trace_pl, HALLWAY_EDGE_THICK)
