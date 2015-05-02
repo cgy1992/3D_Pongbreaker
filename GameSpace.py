@@ -61,7 +61,7 @@ class GameSpace:
 			all_sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
 
 			for sprite in all_sprites:
-				self.blit_3D(sprite.image, sprite.rect, sprite.z_pos)
+				self.blit_3D(sprite)
 
 			self.display_ball_trace(self.ball)
 			pygame.display.flip()
@@ -79,18 +79,15 @@ class GameSpace:
 
 		return background
 
-	def blit_3D(self, orig_image, orig_rect, z_pos):
-		#scale = float(SCALING_FACTOR) / z_pos
-		scale = pow(SCALING_FACTOR, z_pos)
-
+	def blit_3D(self, sprite):
+		scale = pow(SCALING_FACTOR, sprite.z_pos)
 		# resize image
-		scaled_image_width = orig_image.get_size()[0] * scale
-		scaled_image_height = orig_image.get_size()[1] * scale
-		scaled_image = pygame.transform.scale(orig_image, (int(scaled_image_width), int(scaled_image_height)))
-
+		scaled_image_width = sprite.image.get_size()[0] * scale
+		scaled_image_height = sprite.image.get_size()[1] * scale
+		scaled_image = pygame.transform.scale(sprite.image, (int(scaled_image_width), int(scaled_image_height)))
 		# realign center of rectangle
-		rect_screen_diff_x = orig_rect.centerx - SCREEN_CENTER_X
-		rect_screen_diff_y = orig_rect.centery - SCREEN_CENTER_Y
+		rect_screen_diff_x = sprite.rect.centerx - SCREEN_CENTER_X
+		rect_screen_diff_y = sprite.rect.centery - SCREEN_CENTER_Y
 		scaled_rect = scaled_image.get_rect()
 		scaled_rect.centerx = SCREEN_CENTER_X + (rect_screen_diff_x * scale)
 		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)
@@ -98,14 +95,14 @@ class GameSpace:
 		self.screen.blit(scaled_image, scaled_rect)
 
 	def display_ball_trace(self, ball):
+		# calculate trace dimensions
 		trace_width = SCREEN_WIDTH * pow(SCALING_FACTOR, ball.z_pos)
 		trace_height = SCREEN_HEIGHT * pow(SCALING_FACTOR, ball.z_pos)
-
+		# calculate trace corners
 		trace_tl = (((SCREEN_WIDTH - trace_width) / 2), ((SCREEN_HEIGHT - trace_height) / 2))
 		trace_tr = (((SCREEN_WIDTH - trace_width) / 2 + trace_width), ((SCREEN_HEIGHT - trace_height) / 2))
 		trace_bl = (((SCREEN_WIDTH - trace_width) / 2), ((SCREEN_HEIGHT - trace_height) / 2 + trace_height))
 		trace_br = (((SCREEN_WIDTH - trace_width) / 2 + trace_width), ((SCREEN_HEIGHT - trace_height) / 2 + trace_height))
-
+		# draw trace
 		trace_pl = [trace_tl, trace_tr, trace_br, trace_bl]
-
 		pygame.draw.polygon(self.screen, HALLWAY_EDGE_COLOR, trace_pl, HALLWAY_EDGE_THICK)
