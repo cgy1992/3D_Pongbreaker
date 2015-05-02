@@ -47,6 +47,7 @@ BRICK_COLORS = {
 	'R': COLOR_RED,
 	'B': COLOR_BLUE
 }
+BRICK_ALPHA = 100
 BRICK_POS_FN = 'test_brick_pos.txt'
 
 # paddle
