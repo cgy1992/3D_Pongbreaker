@@ -6,6 +6,7 @@
 #
 # FUTURE IMPROVEMENTS
 # Create set of balls with smart launching
+# Make speeds relative to time, not frames
 
 import sys
 
@@ -45,42 +46,7 @@ class GameSpace:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					sys.exit()
-				elif event.type == KEYDOWN:
-#					if event.key == K_LEFT:
-#						self.paddle_1.is_moving_left = True
-#					elif event.key == K_RIGHT:
-#						self.paddle_1.is_moving_right = True
-#					elif event.key == K_UP:
-#						self.paddle_1.is_moving_up = True
-#					elif event.key == K_DOWN:
-#						self.paddle_1.is_moving_down = True
-					# THIS IS A HACK
-					if event.key == K_a:
-						self.paddle_2.is_moving_left = True
-					elif event.key == K_d:
-						self.paddle_2.is_moving_right = True
-					elif event.key == K_w:
-						self.paddle_2.is_moving_up = True
-					elif event.key == K_s:
-						self.paddle_2.is_moving_down = True
-				elif event.type == KEYUP:
-#					if event.key == K_LEFT:
-#						self.paddle_1.is_moving_left = False
-#					elif event.key == K_RIGHT:
-#						self.paddle_1.is_moving_right = False
-#					elif event.key == K_UP:
-#						self.paddle_1.is_moving_up = False
-#					elif event.key == K_DOWN:
-#						self.paddle_1.is_moving_down = False
-					# THIS IS A HACK
-					if event.key == K_a:
-						self.paddle_2.is_moving_left = False
-					elif event.key == K_d:
-						self.paddle_2.is_moving_right = False
-					elif event.key == K_w:
-						self.paddle_2.is_moving_up = False
-					elif event.key == K_s:
-						self.paddle_2.is_moving_down = False
+				# insert code to handle ball launching
 
 			# 6 -- tick game objects
 			self.paddle_1.tick()
@@ -90,16 +56,14 @@ class GameSpace:
 			# 7 -- display game objects
 			self.screen.blit(self.background, (0, 0))
 
-			
-
 			all_sprites = [self.paddle_1, self.paddle_2, self.ball]
 			all_sprites.extend(self.bricks)
 			all_sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
-			
+
 			for sprite in all_sprites:
 				self.blit_3D(sprite.image, sprite.rect, sprite.z_pos)
 
-			self.display_ball_outline()
+			self.display_ball_trace(self.ball)
 			pygame.display.flip()
 
 	def create_background(self):
@@ -129,19 +93,19 @@ class GameSpace:
 		rect_screen_diff_y = orig_rect.centery - SCREEN_CENTER_Y
 		scaled_rect = scaled_image.get_rect()
 		scaled_rect.centerx = SCREEN_CENTER_X + (rect_screen_diff_x * scale)
-		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)		
+		scaled_rect.centery = SCREEN_CENTER_Y + (rect_screen_diff_y * scale)
 
 		self.screen.blit(scaled_image, scaled_rect)
 
-	def display_ball_outline(self):
-		self.OUTLINE_WIDTH = SCREEN_WIDTH * pow(SCALING_FACTOR, self.ball.z_pos) # pixels
-		self.OUTLINE_HEIGHT = SCREEN_HEIGHT * pow(SCALING_FACTOR, self.ball.z_pos) # pixels
+	def display_ball_trace(self, ball):
+		trace_width = SCREEN_WIDTH * pow(SCALING_FACTOR, ball.z_pos)
+		trace_height = SCREEN_HEIGHT * pow(SCALING_FACTOR, ball.z_pos)
 
-		self.OUTLINE_TR = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2 + self.OUTLINE_WIDTH, (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 # pixels
-		self.OUTLINE_TL = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2,(SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 # pixels
-		self.OUTLINE_BL = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2, (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 + self.OUTLINE_HEIGHT # pixels
-		self.OUTLINE_BR = (SCREEN_WIDTH - self.OUTLINE_WIDTH) / 2 + self.OUTLINE_WIDTH , (SCREEN_HEIGHT - self.OUTLINE_HEIGHT) / 2 + self.OUTLINE_HEIGHT
+		trace_tl = (((SCREEN_WIDTH - trace_width) / 2), ((SCREEN_HEIGHT - trace_height) / 2))
+		trace_tr = (((SCREEN_WIDTH - trace_width) / 2 + trace_width), ((SCREEN_HEIGHT - trace_height) / 2))
+		trace_bl = (((SCREEN_WIDTH - trace_width) / 2), ((SCREEN_HEIGHT - trace_height) / 2 + trace_height))
+		trace_br = (((SCREEN_WIDTH - trace_width) / 2 + trace_width), ((SCREEN_HEIGHT - trace_height) / 2 + trace_height))
 
-		self.pointlist = self.OUTLINE_TL, self.OUTLINE_TR, self.OUTLINE_BR, self.OUTLINE_BL
+		trace_pl = [trace_tl, trace_tr, trace_br, trace_bl]
 
-		pygame.draw.polygon(self.screen, (0, 100, 0), self.pointlist, 3)
+		pygame.draw.polygon(self.screen, HALLWAY_EDGE_COLOR, trace_pl, HALLWAY_EDGE_THICK)
