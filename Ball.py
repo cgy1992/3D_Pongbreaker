@@ -7,8 +7,10 @@
 # FUTURE IMPROVEMENTS
 # Decide on initial x and y velocity
 # Make an actual circle
-# Give smart ball exiting
+# Better paddle velocity transferral
 # Revisit collisions
+# Collision sounds
+# Collision flash?
 
 import pygame
 
@@ -33,6 +35,7 @@ class Ball(pygame.sprite.Sprite):
 		self.x_vel = 0
 		self.y_vel = 0
 		self.z_vel = 0
+		self.out_on = int()
 		self.n_on_paddle_frames = 0
 		self.n_out_frames = 0
 
@@ -65,11 +68,13 @@ class Ball(pygame.sprite.Sprite):
 			# regenerate and update score if ball leaves hallway on player 1 side
 			if self.z_pos < 0:
 				self.gs.paddle_2.score += SCORE_VAL
+				self.out_on = 1
 				self.state = 'out'
 				return
 			# adjust score and regenerate if ball leaves hallway on player 2 side
 			elif self.z_pos > HALLWAY_DEPTH:
 				self.gs.paddle_1.score += SCORE_VAL
+				self.out_on = 2
 				self.state = 'out'
 				return
 			# reverse x- or y-direction if ball is touching bounds (or will touch) walls
@@ -112,6 +117,10 @@ class Ball(pygame.sprite.Sprite):
 			self.image.fill(BALL_OUT_COLOR)
 			self.n_out_frames += 1
 			if self.n_out_frames > OUT_FRAMES:
+				if self.out_on == 1:
+					self.gs.balls.add(Ball(2, self.gs))
+				elif self.out_on == 2:
+					self.gs.balls.add(Ball(1, self.gs))
 				self.gs.balls.remove(self)
 
 	def colliderect_3D(self, other):

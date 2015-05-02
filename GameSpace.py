@@ -5,8 +5,7 @@
 # 3D_Pongbreaker
 #
 # FUTURE IMPROVEMENTS
-# Create set of balls with smart launching
-# Make label positions a function of screen size?
+# Better ball launching (quick mouse clicks not detected)
 
 import sys
 
@@ -37,10 +36,12 @@ class GameSpace:
 		self.balls = set()
 		self.balls.add(Ball(1, self))
 		self.balls.add(Ball(2, self))
-		self.title_font = pygame.font.Font(None, 24)
-		self.paddle_1_title_text = self.title_font.render('Player 1', False, COLOR_WHITE)
-		self.paddle_2_title_text = self.title_font.render('Player 2', False, COLOR_WHITE)
-		self.score_font = pygame.font.Font(None, 48)
+		self.title_font = pygame.font.Font(None, TITLE_FONT_SIZE)
+		self.paddle_1_title_text = self.title_font.render('Player 1', False, TEXT_COLOR)
+		self.paddle_2_title_text = self.title_font.render('Player 2', False, TEXT_COLOR)
+		self.paddle_1_title_rect = self.paddle_1_title_text.get_rect()
+		self.paddle_2_title_rect = self.paddle_2_title_text.get_rect()
+		self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
 
 		# 3 -- game loop
 		while True:
@@ -77,12 +78,21 @@ class GameSpace:
 			for ball in self.balls:
 				self.display_ball_trace(ball)
 
-			self.paddle_1_score_text = self.score_font.render(str(self.paddle_1.score), False, COLOR_WHITE)
-			self.paddle_2_score_text = self.score_font.render(str(self.paddle_2.score), False, COLOR_WHITE)
-			self.screen.blit(self.paddle_1_title_text, (0, 0))
-			self.screen.blit(self.paddle_2_title_text, (300, 300))
-			self.screen.blit(self.paddle_1_score_text, (50, 50))
-			self.screen.blit(self.paddle_2_score_text, (350, 350))
+			# create score texts and rects
+			paddle_1_score_text = self.score_font.render(str(self.paddle_1.score), False, TEXT_COLOR)
+			paddle_2_score_text = self.score_font.render(str(self.paddle_2.score), False, TEXT_COLOR)
+			paddle_1_score_rect = paddle_1_score_text.get_rect()
+			paddle_2_score_rect = paddle_2_score_text.get_rect()
+			# align title and score rects
+			paddle_1_score_rect.bottomleft = (0, SCREEN_HEIGHT)
+			paddle_2_score_rect.bottomright = (SCREEN_WIDTH, SCREEN_HEIGHT)
+			self.paddle_1_title_rect.bottomleft = paddle_1_score_rect.topleft
+			self.paddle_2_title_rect.bottomright = paddle_2_score_rect.topright
+			# blit titles and scores
+			self.screen.blit(self.paddle_1_title_text, self.paddle_1_title_rect)
+			self.screen.blit(self.paddle_2_title_text, self.paddle_2_title_rect)
+			self.screen.blit(paddle_1_score_text, paddle_1_score_rect)
+			self.screen.blit(paddle_2_score_text, paddle_2_score_rect)
 
 			pygame.display.flip()
 

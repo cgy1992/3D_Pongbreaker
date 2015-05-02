@@ -5,6 +5,7 @@
 # 3D_Pongbreaker
 #
 # FUTURE IMPROVEMENTS
+# Make velocity a function of last 0.5? seconds
 
 import pygame
 

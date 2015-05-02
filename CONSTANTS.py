@@ -5,7 +5,6 @@
 # 3D_Pongbreaker
 #
 # FUTURE IMPROVEMENTS
-# Have number of brick rows and columns be determined by brick position file
 
 # colors
 COLOR_WHITE = (255, 255, 255)
@@ -25,8 +24,8 @@ FRAMERATE = 30 # frames/second
 
 # hallway
 HALLWAY_DEPTH = 3200 # pixels
-HALLWAY_COLOR = COLOR_BLACK
 HALLWAY_EDGE_THICK = 1 # pixels
+HALLWAY_COLOR = COLOR_BLACK
 HALLWAY_EDGE_COLOR = COLOR_GREEN
 
 # wall
@@ -51,7 +50,7 @@ BRICK_ALPHA = 100
 BRICK_POS_FN = 'test_brick_pos.txt'
 
 # paddle
-PADDLE_SCALING = 5
+PADDLE_SCALING = 3
 PADDLE_WIDTH = SCREEN_WIDTH / PADDLE_SCALING # pixels
 PADDLE_HEIGHT = SCREEN_HEIGHT / PADDLE_SCALING # pixels
 PADDLE_BUFFER = HALLWAY_DEPTH / 50 # pixels
@@ -60,8 +59,13 @@ BRICK_VAL = 10 # points
 SCORE_VAL = 100 # points
 PADDLE_COLOR = COLOR_WHITE
 PADDLE_ALPHA = 100
-MAX_ON_PADDLE_FRAMES = 3 * FRAMERATE # seconds * frames/second = frames
+MAX_ON_PADDLE_FRAMES = 10 * FRAMERATE # seconds * frames/second = frames
 OUT_FRAMES = 2 * FRAMERATE # seconds * frames/second = frames
+
+# label
+TITLE_FONT_SIZE = 24
+SCORE_FONT_SIZE = 48
+TEXT_COLOR = COLOR_WHITE
 
 # ball
 BALL_SCALING = 20
