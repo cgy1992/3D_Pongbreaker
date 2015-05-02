@@ -27,7 +27,7 @@ class BrickCreator:
 			print 'BrickCreator: brick position file incorrectly formatted'
 			sys.exit()
 
-		bricks = list()
+		bricks = set()
 		brick_UL_x_poses = [BRICK_WIDTH * number for number in xrange(N_BRICK_COLUMNS)]
 		brick_UL_y_poses = [BRICK_HEIGHT * number for number in xrange(N_BRICK_ROWS)]
 
@@ -36,7 +36,7 @@ class BrickCreator:
 			for row in xrange(N_BRICK_ROWS):
 				for col in xrange(N_BRICK_COLUMNS):
 					if brick_pos_ls[row][col] != ' ':
-						bricks.append(Brick(brick_pos_ls[row][col], (brick_UL_x_poses[col], brick_UL_y_poses[row]), BRICK_PLANE, self.gs))
+						bricks.add(Brick(brick_pos_ls[row][col], (brick_UL_x_poses[col], brick_UL_y_poses[row]), BRICK_PLANE, self.gs))
 		return bricks
 
 	def verify_brickfile(self, brick_pos_fn):
