@@ -11,7 +11,6 @@ from twisted.internet.protocol import ServerFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 from CONSTANTS import FRAMERATE
-from datetime import datetime
 from twisted.internet.task import LoopingCall
 from GameSpace import GameSpace
 
@@ -25,13 +24,15 @@ class DataConnection(Protocol):
 
 	def connectionMade(self):
 		print "Data Connection Made"
-		gs.main(self)
+		gs.main()
+		self.lc.start(float(1) / FRAMERATE)
 
 	def sendSprites(self):
 		print "Made it into sendSprite"
-		#data = str(gs.ball.z_pos) + ","
-		#print "Sending:", data
-		self.transport.write("hello")
+		gs.GameLoop()
+		data = str(gs.paddle_1.rect.centerx) + ","
+		print "Sending:", data
+		self.transport.write(data)
 
 
 class DataFactory(ServerFactory):

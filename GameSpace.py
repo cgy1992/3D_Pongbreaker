@@ -43,58 +43,58 @@ class GameSpace:
 		self.paddle_2_title_rect = self.paddle_2_title_text.get_rect()
 		self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
 
-		# 3 -- game loop
-		while True:
-			# 4 -- clock tick regulation (framerate)
-			self.clock.tick(FRAMERATE)
+	# 3 -- game loop
+	def GameLoop(self):
+		# 4 -- clock tick regulation (framerate)
+		#self.clock.tick(FRAMERATE)
 
-			# 5 -- handle user inputs
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					sys.exit()
-				elif event.type == MOUSEBUTTONDOWN and event.button == 1:
-					self.paddle_1.launch = True
-					self.paddle_2.launch = True
-				elif event.type == MOUSEBUTTONUP and event.button == 1:
-					self.paddle_1.launch = False
-					self.paddle_2.launch = False
+		# 5 -- handle user inputs
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				sys.exit()
+			elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+				self.paddle_1.launch = True
+				self.paddle_2.launch = True
+			elif event.type == MOUSEBUTTONUP and event.button == 1:
+				self.paddle_1.launch = False
+				self.paddle_2.launch = False
 
-			# 6 -- tick/update game objects
-			self.paddle_1.tick()
-			self.paddle_2.tick()
-			for ball in set(self.balls):
-				ball.tick()
+		# 6 -- tick/update game objects
+		self.paddle_1.tick()
+		self.paddle_2.tick()
+		for ball in set(self.balls):
+			ball.tick()
 
-			# 7 -- display game objects
-			self.screen.blit(self.background, (0, 0))
+		# 7 -- display game objects
+		self.screen.blit(self.background, (0, 0))
 
-			sprites = [self.paddle_1, self.paddle_2]
-			sprites.extend(self.bricks)
-			sprites.extend(self.balls)
-			sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
-			for sprite in sprites:
-				self.blit_3D(sprite)
+		sprites = [self.paddle_1, self.paddle_2]
+		sprites.extend(self.bricks)
+		sprites.extend(self.balls)
+		sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
+		for sprite in sprites:
+			self.blit_3D(sprite)
 
-			for ball in self.balls:
-				self.display_ball_trace(ball)
+		for ball in self.balls:
+			self.display_ball_trace(ball)
 
-			# create score texts and rects
-			paddle_1_score_text = self.score_font.render(str(self.paddle_1.score), False, TEXT_COLOR)
-			paddle_2_score_text = self.score_font.render(str(self.paddle_2.score), False, TEXT_COLOR)
-			paddle_1_score_rect = paddle_1_score_text.get_rect()
-			paddle_2_score_rect = paddle_2_score_text.get_rect()
-			# align title and score rects
-			paddle_1_score_rect.bottomleft = (0, SCREEN_HEIGHT)
-			paddle_2_score_rect.bottomright = (SCREEN_WIDTH, SCREEN_HEIGHT)
-			self.paddle_1_title_rect.bottomleft = paddle_1_score_rect.topleft
-			self.paddle_2_title_rect.bottomright = paddle_2_score_rect.topright
-			# blit titles and scores
-			self.screen.blit(self.paddle_1_title_text, self.paddle_1_title_rect)
-			self.screen.blit(self.paddle_2_title_text, self.paddle_2_title_rect)
-			self.screen.blit(paddle_1_score_text, paddle_1_score_rect)
-			self.screen.blit(paddle_2_score_text, paddle_2_score_rect)
+		# create score texts and rects
+		paddle_1_score_text = self.score_font.render(str(self.paddle_1.score), False, TEXT_COLOR)
+		paddle_2_score_text = self.score_font.render(str(self.paddle_2.score), False, TEXT_COLOR)
+		paddle_1_score_rect = paddle_1_score_text.get_rect()
+		paddle_2_score_rect = paddle_2_score_text.get_rect()
+		# align title and score rects
+		paddle_1_score_rect.bottomleft = (0, SCREEN_HEIGHT)
+		paddle_2_score_rect.bottomright = (SCREEN_WIDTH, SCREEN_HEIGHT)
+		self.paddle_1_title_rect.bottomleft = paddle_1_score_rect.topleft
+		self.paddle_2_title_rect.bottomright = paddle_2_score_rect.topright
+		# blit titles and scores
+		self.screen.blit(self.paddle_1_title_text, self.paddle_1_title_rect)
+		self.screen.blit(self.paddle_2_title_text, self.paddle_2_title_rect)
+		self.screen.blit(paddle_1_score_text, paddle_1_score_rect)
+		self.screen.blit(paddle_2_score_text, paddle_2_score_rect)
 
-			pygame.display.flip()
+		pygame.display.flip()
 
 	def create_background(self):
 		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
