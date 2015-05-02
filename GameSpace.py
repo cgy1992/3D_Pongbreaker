@@ -34,8 +34,8 @@ class GameSpace:
 		self.bc = BrickCreator(self)
 		self.bricks = self.bc.get_bricks(BRICK_POS_FN)
 		self.balls = set()
-		self.balls.add(Ball(self.paddle_1.rect.center, (self.paddle_1.z_pos + 1), BALL_INIT_SPEED, self))
-		self.balls.add(Ball(self.paddle_2.rect.center, (self.paddle_2.z_pos - 1), -BALL_INIT_SPEED, self))
+		self.balls.add(Ball(1, self))
+#		self.balls.add(Ball(2, self))
 
 		# 3 -- game loop
 		while True:
@@ -46,7 +46,12 @@ class GameSpace:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					sys.exit()
-				# insert code to handle ball launching
+				elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+					self.paddle_1.launch = True
+					self.paddle_2.launch = True
+				elif event.type == MOUSEBUTTONUP and event.button == 1:
+					self.paddle_1.launch = False
+					self.paddle_2.launch = False
 
 			# 6 -- tick game objects
 			self.paddle_1.tick()

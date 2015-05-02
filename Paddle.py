@@ -23,6 +23,8 @@ class Paddle(pygame.sprite.Sprite):
 		self.z_pos = z_pos
 		self.old_x_pos = int()
 		self.old_y_pos = int()
+		self.launch = False
+		self.score = 0
 
 	def tick(self):
 		self.old_x_pos = self.rect.centerx

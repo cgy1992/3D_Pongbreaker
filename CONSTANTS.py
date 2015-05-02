@@ -51,16 +51,21 @@ BRICK_ALPHA = 100
 BRICK_POS_FN = 'test_brick_pos.txt'
 
 # paddle
-PADDLE_SCALING = 1
+PADDLE_SCALING = 5
 PADDLE_WIDTH = SCREEN_WIDTH / PADDLE_SCALING # pixels
 PADDLE_HEIGHT = SCREEN_HEIGHT / PADDLE_SCALING # pixels
 PADDLE_BUFFER = HALLWAY_DEPTH / 50 # pixels
 PADDLE_TRANSFER_FRAC = 0.5
+BRICK_VAL = 10 # points
+SCORE_VAL = 100 # points
 PADDLE_COLOR = COLOR_WHITE
 PADDLE_ALPHA = 100
+MAX_ON_PADDLE_FRAMES = 3 * FRAMERATE # seconds * frames/second = frames
+OUT_FRAMES = 2 * FRAMERATE # seconds * frames/second = frames
 
 # ball
 BALL_SCALING = 20
 BALL_RADIUS = min(SCREEN_WIDTH, SCREEN_HEIGHT) / BALL_SCALING / 2 # pixels
-BALL_INIT_SPEED = 500 / FRAMERATE # pixels/second / frames/second = pixels/frame
+BALL_INIT_VEL = 800 / FRAMERATE # pixels/second / frames/second = pixels/frame
 BALL_COLOR = COLOR_WHITE
+BALL_OUT_COLOR = COLOR_RED
