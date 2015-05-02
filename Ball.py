@@ -39,16 +39,19 @@ class Ball(pygame.sprite.Sprite):
 			self.y_vel *= -1
 		# reverse z direction if ball is touching (or will touch) either paddle
 		if self.colliderect_3D(self.gs.paddle_1):
-			# add velocity of paddle
-			self.x_vel = self.gs.paddle_1.diff_x_pos * 0.5
-			self.y_vel = self.gs.paddle_1.diff_y_pos * 0.5
+			# reverse z-direction
 			self.z_vel *= -1
-
-		if self.colliderect_3D(self.gs.paddle_2):
-			# add velocity of paddle
-			self.x_vel = self.gs.paddle_2.diff_x_pos * 0.5
-			self.y_vel = self.gs.paddle_2.diff_y_pos * 0.5
+			# add partial velocity of paddle
+			paddle_vel = self.gs.paddle_1.get_vel()
+			self.x_vel = paddle_vel[0] * PADDLE_TRANSFER_FRAC
+			self.y_vel = paddle_vel[1] * PADDLE_TRANSFER_FRAC
+		elif self.colliderect_3D(self.gs.paddle_2):
+			# reverse z-direction
 			self.z_vel *= -1
+			# add partial velocity of paddle
+			paddle_vel = self.gs.paddle_2.get_vel()
+			self.x_vel = paddle_vel[0] * PADDLE_TRANSFER_FRAC
+			self.y_vel = paddle_vel[1] * PADDLE_TRANSFER_FRAC
 		# reverse z direction and delete brick if ball is touching (or will touch) any brick
 		for brick in list(self.gs.bricks):
 			if self.colliderect_3D(brick):
@@ -59,7 +62,7 @@ class Ball(pygame.sprite.Sprite):
 		self.z_pos += self.z_vel
 		# set alert (HACK) if ball leaves hallway
 		if self.z_pos < 0 or self.z_pos > HALLWAY_DEPTH:
-			del self.gs.ball
+			self.gs.balls.remove(self)
 
 	def colliderect_3D(self, other):
 		return ((self.z_pos <= other.z_pos and (self.z_pos + self.z_vel) >= other.z_pos) or (self.z_pos >= other.z_pos and (self.z_pos + self.z_vel) <= other.z_pos)) and self.rect.colliderect(other.rect)		
