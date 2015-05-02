@@ -6,6 +6,7 @@
 #
 # FUTURE IMPROVEMENTS
 # Create set of balls with smart launching
+# Make label positions a function of screen size?
 
 import sys
 
@@ -35,7 +36,11 @@ class GameSpace:
 		self.bricks = self.bc.get_bricks(BRICK_POS_FN)
 		self.balls = set()
 		self.balls.add(Ball(1, self))
-#		self.balls.add(Ball(2, self))
+		self.balls.add(Ball(2, self))
+		self.title_font = pygame.font.Font(None, 24)
+		self.paddle_1_title_text = self.title_font.render('Player 1', False, COLOR_WHITE)
+		self.paddle_2_title_text = self.title_font.render('Player 2', False, COLOR_WHITE)
+		self.score_font = pygame.font.Font(None, 48)
 
 		# 3 -- game loop
 		while True:
@@ -53,7 +58,7 @@ class GameSpace:
 					self.paddle_1.launch = False
 					self.paddle_2.launch = False
 
-			# 6 -- tick game objects
+			# 6 -- tick/update game objects
 			self.paddle_1.tick()
 			self.paddle_2.tick()
 			for ball in set(self.balls):
@@ -71,6 +76,13 @@ class GameSpace:
 
 			for ball in self.balls:
 				self.display_ball_trace(ball)
+
+			self.paddle_1_score_text = self.score_font.render(str(self.paddle_1.score), False, COLOR_WHITE)
+			self.paddle_2_score_text = self.score_font.render(str(self.paddle_2.score), False, COLOR_WHITE)
+			self.screen.blit(self.paddle_1_title_text, (0, 0))
+			self.screen.blit(self.paddle_2_title_text, (300, 300))
+			self.screen.blit(self.paddle_1_score_text, (50, 50))
+			self.screen.blit(self.paddle_2_score_text, (350, 350))
 
 			pygame.display.flip()
 
