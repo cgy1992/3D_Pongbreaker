@@ -36,7 +36,16 @@ class Ball(pygame.sprite.Sprite):
 		if self.is_out_top_bound(self.rect.move(0, self.y_vel)) or self.is_out_bottom_bound(self.rect.move(0, self.y_vel)):
 			self.y_vel *= -1
 		# reverse z direction if ball is touching (or will touch) either paddle
-		if self.colliderect_3D(self.gs.paddle_1) or self.colliderect_3D(self.gs.paddle_2):
+		if self.colliderect_3D(self.gs.paddle_1):
+			# add velocity of paddle
+			self.x_vel = self.gs.paddle_1.diff_x_pos * 0.5
+			self.y_vel = self.gs.paddle_1.diff_y_pos * 0.5
+			self.z_vel *= -1
+
+		if self.colliderect_3D(self.gs.paddle_2):
+			# add velocity of paddle
+			self.x_vel = self.gs.paddle_2.diff_x_pos * 0.5
+			self.y_vel = self.gs.paddle_2.diff_y_pos * 0.5
 			self.z_vel *= -1
 		# reverse z direction and delete brick if ball is touching (or will touch) any brick
 		for brick in list(self.gs.bricks):

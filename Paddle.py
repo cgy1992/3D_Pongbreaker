@@ -21,6 +21,12 @@ class Paddle(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (SCREEN_CENTER_X, SCREEN_CENTER_Y)
 		self.z_pos = z_pos
+		self.old_x_pos =0
+		self.old_y_pos =0
+		self.diff_x_pos = 0
+		self.diff_y_pos = 0
+		self.new_x_pos =0
+		self.new_y_pos =0
 
 		# properties
 		self.is_moving_left = False
@@ -30,6 +36,18 @@ class Paddle(pygame.sprite.Sprite):
 
 	def tick(self):
 		self.rect.center = pygame.mouse.get_pos()
+		self.new_x_pos = self.rect.centerx
+		self.new_y_pos = self.rect.centery
+
+		self.diff_x_pos = self.new_x_pos - self.old_x_pos
+		self.diff_y_pos = self.new_y_pos - self.old_y_pos
+
+		print self.diff_x_pos, self.diff_y_pos
+
+		self.old_x_pos = self.new_x_pos
+		self.old_y_pos = self.new_y_pos
+
+		
 #		if self.is_moving_left:
 #				if self.is_out_left_bound(self.rect.move(-PADDLE_SPEED, 0)):
 #					self.rect.left = 0
