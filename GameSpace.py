@@ -6,7 +6,6 @@
 #
 # FUTURE IMPROVEMENTS
 # Create set of balls with smart launching
-# Make speeds relative to time, not frames
 
 import sys
 

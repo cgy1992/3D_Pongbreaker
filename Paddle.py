@@ -21,62 +21,13 @@ class Paddle(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = (SCREEN_CENTER_X, SCREEN_CENTER_Y)
 		self.z_pos = z_pos
-		self.old_x_pos =0
-		self.old_y_pos =0
-		self.diff_x_pos = 0
-		self.diff_y_pos = 0
-		self.new_x_pos =0
-		self.new_y_pos =0
-
-		# properties
-		self.is_moving_left = False
-		self.is_moving_right = False
-		self.is_moving_up = False
-		self.is_moving_down = False
+		self.old_x_pos = int()
+		self.old_y_pos = int()
 
 	def tick(self):
+		self.old_x_pos = self.rect.centerx
+		self.old_y_pos = self.rect.centery
 		self.rect.center = pygame.mouse.get_pos()
-		self.new_x_pos = self.rect.centerx
-		self.new_y_pos = self.rect.centery
 
-		self.diff_x_pos = self.new_x_pos - self.old_x_pos
-		self.diff_y_pos = self.new_y_pos - self.old_y_pos
-
-		print self.diff_x_pos, self.diff_y_pos
-
-		self.old_x_pos = self.new_x_pos
-		self.old_y_pos = self.new_y_pos
-
-		
-#		if self.is_moving_left:
-#				if self.is_out_left_bound(self.rect.move(-PADDLE_SPEED, 0)):
-#					self.rect.left = 0
-#				else:
-#					self.rect.move_ip(-PADDLE_SPEED, 0)
-#		if self.is_moving_right:
-#				if self.is_out_right_bound(self.rect.move(PADDLE_SPEED, 0)):
-#					self.rect.right = SCREEN_WIDTH
-#				else:
-#					self.rect.move_ip(PADDLE_SPEED, 0)
-#		if self.is_moving_up:
-#				if self.is_out_top_bound(self.rect.move(0, -PADDLE_SPEED)):
-#					self.rect.top = 0
-#				else:
-#					self.rect.move_ip(0, -PADDLE_SPEED)
-#		if self.is_moving_down:
-#				if self.is_out_bottom_bound(self.rect.move(0, PADDLE_SPEED)):
-#					self.rect.bottom = SCREEN_HEIGHT
-#				else:
-#					self.rect.move_ip(0, PADDLE_SPEED)
-
-	def is_out_left_bound(self, rect):
-		return rect.left < 0
-
-	def is_out_right_bound(self, rect):
-		return rect.right > SCREEN_WIDTH
-
-	def is_out_top_bound(self, rect):
-		return rect.top < 0
-
-	def is_out_bottom_bound(self, rect):
-		return rect.bottom > SCREEN_HEIGHT	  
+	def get_vel(self):
+		return ((self.rect.centerx - self.old_x_pos), (self.rect.centery - self.old_y_pos))

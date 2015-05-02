@@ -21,7 +21,7 @@ SCREEN_HEIGHT = 800 # pixels
 SCREEN_CENTER_X = SCREEN_WIDTH / 2 # pixels
 SCREEN_CENTER_Y = SCREEN_HEIGHT / 2 # pixels
 SCALING_FACTOR = 0.9995 # 'a' in 'y = a^x', where x is distance from screen (pixels) and y is scaling factor
-FRAMERATE = 60 # frames/second
+FRAMERATE = 10 # frames/second
 
 # hallway
 HALLWAY_DEPTH = 3200 # pixels
@@ -54,12 +54,11 @@ PADDLE_SCALING = 10
 PADDLE_WIDTH = SCREEN_WIDTH / PADDLE_SCALING # pixels
 PADDLE_HEIGHT = SCREEN_HEIGHT / PADDLE_SCALING # pixels
 PADDLE_BUFFER = HALLWAY_DEPTH / 50 # pixels
-PADDLE_SPEED = 20 # pixels/frame
 PADDLE_COLOR = COLOR_WHITE
 PADDLE_ALPHA = 100
 
 # ball
 BALL_SCALING = 20
-BALL_RADIUS = min(SCREEN_WIDTH, SCREEN_HEIGHT) / BALL_SCALING / 2
-BALL_INIT_SPEED = 5 # pixels/second
+BALL_RADIUS = min(SCREEN_WIDTH, SCREEN_HEIGHT) / BALL_SCALING / 2 # pixels
+BALL_INIT_SPEED = 500 / FRAMERATE # pixels/second / frames/second = pixels/frame
 BALL_COLOR = COLOR_WHITE

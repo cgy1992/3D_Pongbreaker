@@ -6,6 +6,8 @@
 #
 # FUTURE IMPROVEMENTS
 # Decide on initial x and y velocity
+# Make an actual circle
+# Give smart ball exiting
 
 import pygame
 
