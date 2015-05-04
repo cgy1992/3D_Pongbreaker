@@ -15,6 +15,7 @@ class Brick(pygame.sprite.Sprite):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
+		self.color = color
 		self.image = pygame.Surface([BRICK_WIDTH, BRICK_HEIGHT])
 		self.image.fill(BRICK_COLORS[color])
 		self.image.set_alpha(BRICK_ALPHA)

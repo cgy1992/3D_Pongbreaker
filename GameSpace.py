@@ -24,7 +24,7 @@ class GameSpace:
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
-		pygame.display.set_caption("3D Pongbreaker")
+		pygame.display.set_caption("3D Pongbreaker Host")
 		self.clock = pygame.time.Clock()
 
 		# 2 -- create game objects
@@ -96,6 +96,7 @@ class GameSpace:
 
 		pygame.display.flip()
 
+
 	def create_background(self):
 		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 		# draw wall edges
@@ -108,7 +109,7 @@ class GameSpace:
 		pygame.draw.polygon(background, HALLWAY_EDGE_COLOR, back_wall_pl, HALLWAY_EDGE_THICK)
 
 		return background
-
+		
 	def blit_3D(self, sprite):
 		scale = pow(SCALING_FACTOR, sprite.z_pos)
 		# resize image
