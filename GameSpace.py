@@ -25,7 +25,6 @@ class GameSpace:
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
 		pygame.display.set_caption("3D Pongbreaker")
-		self.clock = pygame.time.Clock()
 
 		# 2 -- create game objects
 		self.background = self.create_background()
@@ -46,7 +45,7 @@ class GameSpace:
 	# 3 -- game loop
 	def gameloop(self):
 		# 4 -- clock tick regulation (framerate)
-		#self.clock.tick(FRAMERATE)
+	
 
 		# 5 -- handle user inputs
 		for event in pygame.event.get():
