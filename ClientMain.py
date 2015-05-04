@@ -6,35 +6,28 @@
 #
 # FUTURE IMPROVEMENTS
 
-
-from twisted.internet.protocol import Factory
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 
 from GameSpace import GameSpace
 
-##### Data Connection #####
-
-class DataClient(Protocol):
+class Data_Client_Protocol(Protocol):
 	def connectionMade(self):
-		print "connected to the server"
+		print 'Connected to the host'
 
 	def dataReceived(self, data):
 		print "Server said:", data
 
 	def connectionLost(self, reason):
 		print "data connection lost"
-		
 
 class DataFactory(ClientFactory):
 	def __init__(self):
-		self.dataConnection = DataClient()
+		self.dataConnection = Data_Client_Protocol()
 
 	def buildProtocol(self, addr):
 		return self.dataConnection
-
-
 
 if __name__ == '__main__':
 	# For now, consider this the host main

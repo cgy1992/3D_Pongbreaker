@@ -19,7 +19,7 @@ from Ball import Ball
 from CONSTANTS import *
 
 class GameSpace:
-	def main(self):
+	def __init__(self):
 		# 1 -- initialization
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
@@ -44,7 +44,7 @@ class GameSpace:
 		self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
 
 	# 3 -- game loop
-	def GameLoop(self):
+	def gameloop(self):
 		# 4 -- clock tick regulation (framerate)
 		#self.clock.tick(FRAMERATE)
 

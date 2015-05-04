@@ -6,49 +6,33 @@
 #
 # FUTURE IMPROVEMENTS
 
-from twisted.internet.protocol import Factory
 from twisted.internet.protocol import ServerFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
-from CONSTANTS import FRAMERATE
 from twisted.internet.task import LoopingCall
+
 from GameSpace import GameSpace
+from CONSTANTS import FRAMERATE
 
-gs = GameSpace()
-
-
-class DataConnection(Protocol):
+class Data_Host_Protocol(Protocol):
 	def __init__(self):
-		pass
-		self.lc = LoopingCall(self.sendSprites)
+		self.gs = GameSpace()
+		self.lc = LoopingCall(self.send_screen)
 
 	def connectionMade(self):
-		print "Data Connection Made"
-		gs.main()
+		print 'Connected to client'
 		self.lc.start(float(1) / FRAMERATE)
 
-	def sendSprites(self):
-		print "Made it into sendSprite"
-		gs.GameLoop()
-		data = str(gs.paddle_1.rect.centerx) + ","
-		print "Sending:", data
+	def send_screen(self):
+		print 'In send_screen'
+		self.gs.gameloop()
+		data = "Paddle 1 center x: {0}".format(self.gs.paddle_1.rect.centerx)
+		print 'Sending:', data
 		self.transport.write(data)
 
-
-class DataFactory(ServerFactory):
-	def __init__(self):
-		self.dataConnection = DataConnection()
-
+class Data_Factory(ServerFactory):
 	def buildProtocol(self, addr):
-		return self.dataConnection
+		return Data_Host_Protocol()
 
-
-if __name__ == '__main__':
-	# For now, consider this the host main
-	dataFactory = DataFactory()
-	reactor.listenTCP(9001, dataFactory)
-	reactor.run()
-
-
-
-
+reactor.listenTCP(9001, Data_Factory())
+reactor.run()
