@@ -92,7 +92,7 @@ class ClientSpace:
 	def get_mouse(self):
 		for event in pygame.event.get():
 			pass
-		return pygame.mouse.get_pos()
+		mouse_pos pygame.mouse.get_pos()
 	
 	def create_background(self):
 		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))

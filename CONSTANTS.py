@@ -20,7 +20,7 @@ SCREEN_HEIGHT = 800 # pixels
 SCREEN_CENTER_X = SCREEN_WIDTH / 2 # pixels
 SCREEN_CENTER_Y = SCREEN_HEIGHT / 2 # pixels
 SCALING_FACTOR = 0.9995 # 'a' in 'y = a^x', where x is distance from screen (pixels) and y is scaling factor
-FRAMERATE = 5 # frames/second
+FRAMERATE = 25 # frames/second
 
 # hallway
 HALLWAY_DEPTH = 3200 # pixels
