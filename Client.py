@@ -6,6 +6,8 @@
 #
 # FUTURE IMPROVEMENTS
 
+import sys
+
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
@@ -13,7 +15,7 @@ import cPickle as pickle
 
 from GameSpace import GameSpace
 
-class Data_Client_Protocol(Protocol):
+class Client_Protocol(Protocol):
 	def connectionMade(self):
 		print 'Connected to the host'
 
@@ -21,20 +23,16 @@ class Data_Client_Protocol(Protocol):
 		info = pickle.loads(data)
 		print "Server said:", info['balls']
 
+		print 'Host said:', data
+
+
 	def connectionLost(self, reason):
-		print "data connection lost"
+		print 'Connection lost:', reason
+		sys.exit()
 
-class DataFactory(ClientFactory):
-	def __init__(self):
-		self.dataConnection = Data_Client_Protocol()
-
+class Client_Factory(ClientFactory):
 	def buildProtocol(self, addr):
-		return self.dataConnection
+		return Client_Protocol()
 
-if __name__ == '__main__':
-	# For now, consider this the host main
-	dataFactory = DataFactory()
-	reactor.connectTCP("localhost", 9001, dataFactory)
-
-	reactor.run()
-
+reactor.connectTCP('localhost', 9001, Client_Factory())
+reactor.run()
