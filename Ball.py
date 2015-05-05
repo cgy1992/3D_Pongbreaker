@@ -11,13 +11,14 @@
 # Revisit collisions
 # Collision sounds
 # Collision flash?
+# Client ball launching?
 
 import pygame
 
 from CONSTANTS import *
 
 class Ball(pygame.sprite.Sprite):
-	def __init__(self, last_hit, gs):
+	def __init__(self, center, z_pos, last_hit, gs):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
@@ -25,12 +26,8 @@ class Ball(pygame.sprite.Sprite):
 		self.image.fill(BALL_COLOR)
 		self.rect = self.image.get_rect()
 		self.last_hit = last_hit
-		if self.last_hit == 1:
-			self.rect.center = self.gs.paddle_1.rect.center
-			self.z_pos = self.gs.paddle_1.z_pos + 1
-		elif self.last_hit == 2:
-			self.rect.center = self.gs.paddle_2.rect.center
-			self.z_pos = self.gs.paddle_2.z_pos - 1
+		self.rect.center = center
+		self.z_pos = z_pos
 		self.state = 'on paddle' # {on paddle, launch, in play, out}
 		self.x_vel = 0
 		self.y_vel = 0
@@ -118,9 +115,9 @@ class Ball(pygame.sprite.Sprite):
 			self.n_out_frames += 1
 			if self.n_out_frames > OUT_FRAMES:
 				if self.out_on == 1:
-					self.gs.balls.add(Ball(2, self.gs))
+					self.gs.balls.add(Ball(self.gs.paddle_2.rect.center, (self.gs.paddle_2.z_pos - 1), 2, self.gs))
 				elif self.out_on == 2:
-					self.gs.balls.add(Ball(1, self.gs))
+					self.gs.balls.add(Ball(self.gs.paddle_1.rect.center, (self.gs.paddle_1.z_pos + 1), 1, self.gs))
 				self.gs.balls.remove(self)
 
 	def colliderect_3D(self, other):
