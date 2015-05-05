@@ -35,8 +35,9 @@ class Data_Host_Protocol(Protocol):
 	def send_screen(self):
 		print 'In send_screen'
 		self.gs.gameloop()
-		data = { 'p1' : self.gs.paddle_1.rect.center,
-				 'p2' : self.gs.paddle_2.rect.center
+		
+		data = { 'p1' : (self.gs.paddle_1.rect.center, self.gs.paddle_1.score)
+				 'p2' : (self.gs.paddle_2.rect.center, self.gs.paddle_2.score)
 				}
 
 		balls = []
