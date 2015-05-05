@@ -23,9 +23,6 @@ class Client_Protocol(Protocol):
 		info = pickle.loads(data)
 		print "Server said:", info['balls']
 
-		print 'Host said:', data
-
-
 	def connectionLost(self, reason):
 		print 'Connection lost:', reason
 		sys.exit()

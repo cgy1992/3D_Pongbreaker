@@ -27,7 +27,10 @@ class Data_Host_Protocol(Protocol):
 		self.lc.start(float(1) / FRAMERATE)
 
 	def dataReceived(self, data):
-		pass
+		# Host has received that player 2 moved his mouse, update paddle
+		positions = data.split(',')
+		self.gs.paddle_2.manual_x = positions[0]
+		self.gs.paddle_2.manual_y = positions[1]
 
 	def send_screen(self):
 		print 'In send_screen'
