@@ -53,10 +53,10 @@ class GameSpace:
 				sys.exit()
 			elif event.type == MOUSEBUTTONDOWN and event.button == 1:
 				self.paddle_1.launch = True
-				self.paddle_2.launch = True
+
 			elif event.type == MOUSEBUTTONUP and event.button == 1:
 				self.paddle_1.launch = False
-				self.paddle_2.launch = False
+
 
 		# 6 -- tick/update game objects
 		self.paddle_1.tick()

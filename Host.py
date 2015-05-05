@@ -25,9 +25,13 @@ class Host_Protocol(Protocol):
 		self.lc.start(float(1) / FRAMERATE)
 
 	def dataReceived(self, data):
-		(mouse_x, mouse_y) = data.split(',')
+		(mouse_x, mouse_y, launch_paddle_2) = data.split(',')
 		self.gs.paddle_2.manual_x = int(mouse_x)
 		self.gs.paddle_2.manual_y = int(mouse_y)
+		if int(launch_paddle_2) is 1:
+			self.gs.paddle_2.launch = True
+		elif int(launch_paddle_2) is 0:
+			self.gs.paddle_2.launch = False
 
 	def send_objects(self):
 		self.gs.gameloop()

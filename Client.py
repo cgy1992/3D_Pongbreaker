@@ -32,8 +32,8 @@ class Client_Protocol(Protocol):
 			pass
 
 	def send_mouse(self):
-		(mouse_x, mouse_y) = self.cs.get_mouse()
-		mouse_pos_str = "{0},{1}".format(mouse_x, mouse_y)
+		(mouse_x, mouse_y, launch_paddle_2) = self.cs.get_mouse()
+		mouse_pos_str = "{0},{1},{2}".format(mouse_x, mouse_y, launch_paddle_2)
 		self.transport.write(mouse_pos_str)
 
 	def connectionLost(self, reason):
@@ -44,5 +44,5 @@ class Client_Factory(ClientFactory):
 	def buildProtocol(self, addr):
 		return Client_Protocol()
 
-reactor.connectTCP('fitz70@helios.nd.edu', 9300, Client_Factory())
+reactor.connectTCP('localhost', 9300, Client_Factory())
 reactor.run()

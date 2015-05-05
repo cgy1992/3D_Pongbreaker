@@ -54,6 +54,8 @@ class Ball(pygame.sprite.Sprite):
 				self.state = 'launch'
 		elif self.state == 'launch':
 			# set initial x-, y-, and z-velocity
+			pygame.mixer.music.load("./sounds/blip.wav")
+			pygame.mixer.music.play()
 			self.x_vel = 0.5 * BALL_INIT_VEL
 			self.y_vel = 0.75 * BALL_INIT_VEL
 			if self.last_hit == 1:

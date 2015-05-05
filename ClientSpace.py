@@ -90,11 +90,16 @@ class ClientSpace:
 		return new_z
 
 	def get_mouse(self):
+		launch_paddle_2 = 0		# Assume button is not down
 		for event in pygame.event.get():
-			pass
+			if event.type == MOUSEBUTTONDOWN:
+				print "cicked mouse"
+				launch_paddle_2 = 1
+			elif event.type == MOUSEBUTTONUP:
+				launch_paddle_2 = 0
 		(mx, my) = pygame.mouse.get_pos()
 		mx = self.reverse_x(mx)
-		return (mx, my)
+		return (mx, my, launch_paddle_2)
 	
 	def create_background(self):
 		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
