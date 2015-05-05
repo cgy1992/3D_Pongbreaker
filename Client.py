@@ -13,6 +13,7 @@ from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 import cPickle as pickle
+from CONSTANTS import *
 
 from ClientSpace import ClientSpace
 
@@ -30,8 +31,11 @@ class Client_Protocol(Protocol):
 		self.transport.write("{0},{1}".format(mouse_pos[0], mouse_pos[1]))
 
 	def dataReceived(self, data):
-		info = pickle.loads(data)
-		self.cs.update_screen(info)
+		try:
+			info = pickle.loads(data)
+			self.cs.update_screen(info)
+		except:
+			pass
 
 	def connectionLost(self, reason):
 		print 'Connection lost:', reason
@@ -41,5 +45,5 @@ class Client_Factory(ClientFactory):
 	def buildProtocol(self, addr):
 		return Client_Protocol()
 
-reactor.connectTCP('localhost', 9001, Client_Factory())
+reactor.connectTCP('student00.cse.nd.edu', 9300, Client_Factory())
 reactor.run()
