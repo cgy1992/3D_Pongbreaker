@@ -29,7 +29,7 @@ class Host_Protocol(Protocol):
 		self.gs.paddle_2.manual_x = int(mouse_x)
 		self.gs.paddle_2.manual_y = int(mouse_y)
 
-	def send_screen(self):
+	def send_objects(self):
 		self.gs.gameloop()
 
 		objects = {
@@ -40,12 +40,12 @@ class Host_Protocol(Protocol):
 		bricks = set()
 		for brick in self.gs.bricks:
 			bricks.add((brick.rect.center, brick.z_pos, brick.color))
-		data['bricks'] = bricks
+		objects['bricks'] = bricks
 
 		balls = set()
 		for ball in self.gs.balls:
 			balls.add((ball.rect.center, ball.z_pos))
-		data['balls'] = balls
+		objects['balls'] = balls
 
 		pickled_objects = pickle.dumps(objects)
 		self.transport.write(pickled_objects)
