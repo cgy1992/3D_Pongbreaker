@@ -44,5 +44,5 @@ class Client_Factory(ClientFactory):
 	def buildProtocol(self, addr):
 		return Client_Protocol()
 
-reactor.connectTCP('localhost', 9300, Client_Factory())
+reactor.connectTCP('fitz70@helios.nd.edu', 9300, Client_Factory())
 reactor.run()
