@@ -26,6 +26,9 @@ class Data_Host_Protocol(Protocol):
 		print 'Connected to client'
 		self.lc.start(float(1) / FRAMERATE)
 
+	def dataReceived(self, data):
+		pass
+
 	def send_screen(self):
 		print 'In send_screen'
 		self.gs.gameloop()
@@ -35,10 +38,10 @@ class Data_Host_Protocol(Protocol):
 
 		balls = []
 		for ball in self.gs.balls:
-			balls.append((ball.rect.topleftx, ball.rect.toplefty, ball.z_pos))
+			balls.append((ball.rect.topleft, ball.z_pos))
 		bricks = []
 		for brick in self.gs.bricks:
-			bricks.append((brick.rect.topleftx, ball.rect.toplefty, brick.z_pos, brick.color))
+			bricks.append((brick.rect.topleft, brick.z_pos, brick.color))
 		
 		data['balls'] = balls
 		data['bricks'] = bricks
