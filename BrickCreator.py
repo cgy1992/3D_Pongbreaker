@@ -36,7 +36,7 @@ class BrickCreator:
 			for row in xrange(N_BRICK_ROWS):
 				for col in xrange(N_BRICK_COLUMNS):
 					if brick_pos_ls[row][col] != ' ':
-						bricks.add(Brick(brick_pos_ls[row][col], (brick_UL_x_poses[col], brick_UL_y_poses[row]), BRICK_PLANE, self.gs))
+						bricks.add(Brick(brick_pos_ls[row][col], (brick_UL_x_poses[col], brick_UL_y_poses[row]), 'topleft', BRICK_PLANE, self.gs))
 		return bricks
 
 	def verify_brickfile(self, brick_pos_fn):

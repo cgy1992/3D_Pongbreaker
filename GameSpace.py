@@ -29,7 +29,7 @@ class GameSpace:
 		# 2 -- create game objects
 		self.background = self.create_background()
 		self.paddle_1 = Paddle(PADDLE_BUFFER, 'host', self)
-		self.paddle_2 = Paddle(HALLWAY_DEPTH - PADDLE_BUFFER, 'client', self)
+		self.paddle_2 = Paddle((HALLWAY_DEPTH - PADDLE_BUFFER), 'client', self)
 		self.bc = BrickCreator(self)
 		self.bricks = self.bc.get_bricks(BRICK_POS_FN)
 		self.balls = set()

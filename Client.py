@@ -11,17 +11,27 @@ import sys
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
+from twisted.internet.task import LoopingCall
 import cPickle as pickle
 
-from GameSpace import GameSpace
+from ClientSpace import ClientSpace
 
 class Client_Protocol(Protocol):
+	def __init__(self):
+		self.cs = ClientSpace()
+		self.lc = LoopingCall(self.send_mouse)
+
 	def connectionMade(self):
 		print 'Connected to the host'
+		self.lc.start(float(1) / FRAMERATE)
+
+	def send_mouse(self):
+		mouse_pos = self.cs.get_mouse()
+		self.transport.write("{0},{1}".format(mouse_pos[0], mouse_pos[1]))
 
 	def dataReceived(self, data):
 		info = pickle.loads(data)
-		print "Server said:", info['balls']
+		self.cs.update_screen(info)
 
 	def connectionLost(self, reason):
 		print 'Connection lost:', reason

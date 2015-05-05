@@ -36,7 +36,7 @@ class Data_Host_Protocol(Protocol):
 		print 'In send_screen'
 		self.gs.gameloop()
 		
-		data = { 'p1' : (self.gs.paddle_1.rect.center, self.gs.paddle_1.score)
+		data = { 'p1' : (self.gs.paddle_1.rect.center, self.gs.paddle_1.score),
 				 'p2' : (self.gs.paddle_2.rect.center, self.gs.paddle_2.score)
 				}
 
@@ -45,7 +45,7 @@ class Data_Host_Protocol(Protocol):
 			balls.append((ball.rect.topleft, ball.z_pos))
 		bricks = []
 		for brick in self.gs.bricks:
-			bricks.append((brick.rect.topleft, brick.z_pos, brick.color))
+			bricks.append((brick.rect.center, brick.z_pos, brick.color))
 		
 		data['balls'] = balls
 		data['bricks'] = bricks

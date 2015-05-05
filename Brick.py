@@ -11,7 +11,7 @@ import pygame
 from CONSTANTS import *
 
 class Brick(pygame.sprite.Sprite):
-	def __init__(self, color, topleft, z_pos, gs):
+	def __init__(self, color, topleft_or_center, pos_ind, z_pos, gs):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
@@ -21,5 +21,8 @@ class Brick(pygame.sprite.Sprite):
 		self.image.fill(BRICK_COLORS[color])
 		self.image.set_alpha(BRICK_ALPHA)
 		self.rect = self.image.get_rect()
-		self.rect.topleft = topleft
+		if pos_ind == 'topleft':
+			self.rect.topleft = topleft_or_center
+		else:
+			self.rect.center = topleft_or_center
 		self.z_pos = z_pos
