@@ -90,6 +90,8 @@ class ClientSpace:
 		return new_z
 
 	def get_mouse(self):
+		for event in pygame.event.get():
+			pass
 		return pygame.mouse.get_pos()
 	
 	def create_background(self):
