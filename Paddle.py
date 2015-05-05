@@ -12,7 +12,7 @@ import pygame
 from CONSTANTS import *
 
 class Paddle(pygame.sprite.Sprite):
-	def __init__(self, z_pos, gs):
+	def __init__(self, z_pos, owner, gs):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
@@ -24,13 +24,19 @@ class Paddle(pygame.sprite.Sprite):
 		self.z_pos = z_pos
 		self.old_x_pos = int()
 		self.old_y_pos = int()
+		self.owner = owner
+		self.manual_x = int()
+		self.manual_y = int()
 		self.launch = False
 		self.score = 0
 
 	def tick(self):
 		self.old_x_pos = self.rect.centerx
 		self.old_y_pos = self.rect.centery
-		self.rect.center = pygame.mouse.get_pos()
+		if self.owner == 'host':
+			self.rect.center = pygame.mouse.get_pos()
+		else:
+			self.rect.center = (self.manual_x, self.manual_y)
 
 	def get_vel(self):
 		return ((self.rect.centerx - self.old_x_pos), (self.rect.centery - self.old_y_pos))
