@@ -92,7 +92,6 @@ class ClientSpace:
 	def get_mouse(self):
 		for event in pygame.event.get():
 			pass
-		
 		(mx, my) = pygame.mouse.get_pos()
 		mx = self.reverse_x(mx)
 		return (mx, my)
