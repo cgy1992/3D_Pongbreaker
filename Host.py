@@ -29,11 +29,10 @@ class Data_Host_Protocol(Protocol):
 	def dataReceived(self, data):
 		# Host has received that player 2 moved his mouse, update paddle
 		positions = data.split(',')
-		self.gs.paddle_2.manual_x = positions[0]
-		self.gs.paddle_2.manual_y = positions[1]
+		self.gs.paddle_2.manual_x = int(positions[0])
+		self.gs.paddle_2.manual_y = int(positions[1])
 
 	def send_screen(self):
-		print 'In send_screen'
 		self.gs.gameloop()
 		
 		data = { 'p1' : (self.gs.paddle_1.rect.center, self.gs.paddle_1.score),
@@ -51,13 +50,11 @@ class Data_Host_Protocol(Protocol):
 		data['bricks'] = bricks
 
 		pd = pickle.dumps(data)
-		data = "Paddle 1 center x: {0}".format(self.gs.paddle_1.rect.centerx)
-		print 'Sending:', data
 		self.transport.write(pd)
 
 class Data_Factory(ServerFactory):
 	def buildProtocol(self, addr):
 		return Data_Host_Protocol()
 
-reactor.listenTCP(9001, Data_Factory())
+reactor.listenTCP(9300, Data_Factory())
 reactor.run()
