@@ -43,7 +43,8 @@ class ClientSpace:
 		for brick_pos in pos_dict['bricks']:
 			self.bricks.add(Brick(brick_pos[2], (self.reverse_x(brick_pos[0][0]), brick_pos[0][1]), 'center', self.reverse_z(brick_pos[1]), self))
 		for ball_pos in pos_dict['balls']:
-			self.balls.add(Ball((self.reverse_x(ball_pos[0][0]), ball_pos[0][1]), self.reverse_z(ball_pos[1]), 'not used', self))
+			color = (int(ball_pos[2][0]), int(ball_pos[2][1]), int(ball_pos[2][2]))
+			self.balls.add(Ball((self.reverse_x(ball_pos[0][0]), ball_pos[0][1]), self.reverse_z(ball_pos[1]), 'not used', self, color))
 
 		# display game objects
 		self.screen.blit(self.background, (0, 0))
@@ -54,7 +55,6 @@ class ClientSpace:
 		sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
 		for sprite in sprites:
 			self.blit_3D(sprite)
-
 		for ball in self.balls:
 			self.display_ball_trace(ball)
 
@@ -93,7 +93,6 @@ class ClientSpace:
 		launch_paddle_2 = 0		# Assume button is not down
 		for event in pygame.event.get():
 			if event.type == MOUSEBUTTONDOWN:
-				print "cicked mouse"
 				launch_paddle_2 = 1
 			elif event.type == MOUSEBUTTONUP:
 				launch_paddle_2 = 0

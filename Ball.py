@@ -18,12 +18,17 @@ import pygame
 from CONSTANTS import *
 
 class Ball(pygame.sprite.Sprite):
-	def __init__(self, center, z_pos, last_hit, gs):
+	def __init__(self, center, z_pos, last_hit, gs, color_overide=None):
 		# initialize
 		pygame.sprite.Sprite.__init__(self)
 		self.gs = gs
 		self.image = pygame.Surface(((BALL_RADIUS * 2), (BALL_RADIUS * 2)))
-		self.image.fill(BALL_COLOR)
+		if color_overide:		# used for client player
+			self.color = color_overide
+			self.image.fill(self.color)
+		else:
+			self.color = BALL_COLOR	
+			self.image.fill(self.color)	
 		self.rect = self.image.get_rect()
 		self.last_hit = last_hit
 		self.rect.center = center
@@ -66,7 +71,8 @@ class Ball(pygame.sprite.Sprite):
 				self.z_vel = -BALL_INIT_VEL
 			self.state = 'in play'
 		elif self.state == 'in play':
-			self.image.fill(BALL_COLOR)
+			self.color = BALL_COLOR
+			self.image.fill(self.color)
 			# regenerate and update score if ball leaves hallway on player 1 side
 			if self.z_pos < 0:
 				self.gs.paddle_2.score += SCORE_VAL
@@ -86,7 +92,8 @@ class Ball(pygame.sprite.Sprite):
 				self.y_vel *= -1
 			# reverse z-direction, adjust x- and y- velocity, and update last hit if ball is touching (or will touch) either paddle
 			if self.colliderect_3D(self.gs.paddle_1):
-				self.image.fill(BALL_PADDLE_COLLIDE_COLOR)
+				self.color = BALL_COLLIDE_COLOR
+				self.image.fill(self.color)
 				# reverse z-direction
 				self.z_vel *= -1
 				# add partial velocity of paddle
@@ -96,7 +103,8 @@ class Ball(pygame.sprite.Sprite):
 				# update last hit
 				self.last_hit = 1
 			elif self.colliderect_3D(self.gs.paddle_2):
-				self.image.fill(BALL_PADDLE_COLLIDE_COLOR)
+				self.color = BALL_COLLIDE_COLOR
+				self.image.fill(self.color)
 				# reverse z-direction
 				self.z_vel *= -1
 				# add partial velocity of paddle
@@ -108,6 +116,8 @@ class Ball(pygame.sprite.Sprite):
 			# reverse z-direction, delete brick, and adjust score if ball is touching (or will touch) any brick
 			for brick in set(self.gs.bricks):
 				if self.colliderect_3D(brick):
+					self.color = BALL_COLLIDE_COLOR
+					self.image.fill(self.color)
 					self.z_vel *= -1
 					self.gs.bricks.remove(brick)
 					if self.last_hit == 1:
@@ -118,7 +128,8 @@ class Ball(pygame.sprite.Sprite):
 			self.rect.move_ip(self.x_vel, self.y_vel)
 			self.z_pos += self.z_vel
 		elif self.state == 'out':
-			self.image.fill(BALL_OUT_COLOR)
+			self.color = BALL_OUT_COLOR
+			self.image.fill(self.color)
 			self.n_out_frames += 1
 			if self.n_out_frames > OUT_FRAMES:
 				if self.out_on == 1:

@@ -25,13 +25,16 @@ class Host_Protocol(Protocol):
 		self.lc.start(float(1) / FRAMERATE)
 
 	def dataReceived(self, data):
-		(mouse_x, mouse_y, launch_paddle_2) = data.split(',')
-		self.gs.paddle_2.manual_x = int(mouse_x)
-		self.gs.paddle_2.manual_y = int(mouse_y)
-		if int(launch_paddle_2) is 1:
-			self.gs.paddle_2.launch = True
-		elif int(launch_paddle_2) is 0:
-			self.gs.paddle_2.launch = False
+		try:
+			(mouse_x, mouse_y, launch_paddle_2) = data.split(',')
+			self.gs.paddle_2.manual_x = int(mouse_x)
+			self.gs.paddle_2.manual_y = int(mouse_y)
+			if int(launch_paddle_2) is 1:
+				self.gs.paddle_2.launch = True
+			elif int(launch_paddle_2) is 0:
+				self.gs.paddle_2.launch = False
+		except:
+			pass
 
 	def send_objects(self):
 		self.gs.gameloop()
@@ -48,7 +51,7 @@ class Host_Protocol(Protocol):
 
 		balls = set()
 		for ball in self.gs.balls:
-			balls.add((ball.rect.center, ball.z_pos))
+			balls.add((ball.rect.center, ball.z_pos, ball.color))
 		objects['balls'] = balls
 
 		pickled_objects = pickle.dumps(objects)
@@ -56,11 +59,11 @@ class Host_Protocol(Protocol):
 
 	def connectionLost(self, reason):
 		print 'Connection lost:', reason
-		sys.exit()
+		sys.exit
 
 class Host_Factory(ServerFactory):
 	def buildProtocol(self, addr):
 		return Host_Protocol()
 
-reactor.listenTCP(9300, Host_Factory())
+reactor.listenTCP(9313, Host_Factory())
 reactor.run()
