@@ -9,13 +9,18 @@
 # Make an actual circle
 # Better paddle velocity transferral
 # Revisit collisions
-# Collision sounds
-# Collision flash?
-# Client ball launching?
 
 import pygame
 
-from CONSTANTS import *
+from CONSTANTS import BALL_RADIUS
+from CONSTANTS import BALL_COLOR
+from CONSTANTS	import BALL_INIT_VEL
+from CONSTANTS	import HALLWAY_DEPTH
+from CONSTANTS	import SCORE_VAL
+from CONSTANTS	import BALL_COLLIDE_COLOR
+from CONSTANTS	import OUT_FRAMES
+from CONSTANTS	import SCREEN_WIDTH
+from CONSTANTS	import SCREEN_HEIGHT
 
 class Ball(pygame.sprite.Sprite):
 	def __init__(self, center, z_pos, last_hit, gs, color_overide=None):
