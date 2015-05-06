@@ -32,17 +32,17 @@ class Client_Protocol(Protocol):
 			pass
 
 	def send_mouse(self):
-		(mouse_x, mouse_y) = self.cs.get_mouse()
-		mouse_pos_str = "{0},{1}".format(mouse_x, mouse_y)
-		self.transport.write(mouse_pos_str)
+		(mouse_x, mouse_y, paddle_2_launch) = self.cs.get_mouse()
+		mouse_str = "{0},{1},{2}".format(mouse_x, mouse_y, paddle_2_launch)
+		self.transport.write(mouse_str)
 
 	def connectionLost(self, reason):
-		print 'Connection lost:', reason
+		print 'Connection to host lost:', reason
 		sys.exit()
 
 class Client_Factory(ClientFactory):
 	def buildProtocol(self, addr):
 		return Client_Protocol()
 
-reactor.connectTCP('fitz70', 9300, Client_Factory())
+reactor.connectTCP('fitz70', 9313, Client_Factory())
 reactor.run()

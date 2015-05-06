@@ -48,7 +48,7 @@ BRICK_COLORS = {
 	'B': COLOR_BLUE
 }
 BRICK_ALPHA = 100
-BRICK_POS_FN = 'test_brick_pos.txt'
+BRICK_POS_FN = './test_brick_pos.txt'
 
 # paddle
 PADDLE_SCALING = 3
@@ -73,5 +73,6 @@ BALL_SCALING = 20
 BALL_RADIUS = min(SCREEN_WIDTH, SCREEN_HEIGHT) / BALL_SCALING / 2 # pixels
 BALL_INIT_VEL = 800 / FRAMERATE # pixels/second / frames/second = pixels/frame
 BALL_COLOR = COLOR_WHITE
-BALL_OUT_COLOR = COLOR_RED
 BALL_COLLIDE_COLOR = COLOR_GREEN
+BALL_OUT_COLOR = COLOR_RED
+BALL_COLLIDE_SOUND = './sounds/blip.wav'

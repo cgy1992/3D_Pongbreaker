@@ -29,9 +29,10 @@ class Host_Protocol(Protocol):
 			(mouse_x, mouse_y, launch_paddle_2) = data.split(',')
 			self.gs.paddle_2.manual_x = int(mouse_x)
 			self.gs.paddle_2.manual_y = int(mouse_y)
-			if int(launch_paddle_2) is 1:
+			launch_paddle_2 = int(launch_paddle_2)
+			if launch_paddle_2:
 				self.gs.paddle_2.launch = True
-			elif int(launch_paddle_2) is 0:
+			else:
 				self.gs.paddle_2.launch = False
 		except:
 			pass
@@ -58,7 +59,7 @@ class Host_Protocol(Protocol):
 		self.transport.write(pickled_objects)
 
 	def connectionLost(self, reason):
-		print 'Connection lost:', reason
+		print 'Connection to client lost:', reason
 		sys.exit
 
 class Host_Factory(ServerFactory):
