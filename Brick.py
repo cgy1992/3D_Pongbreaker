@@ -4,11 +4,15 @@
 # Final Project: PyGame + Twisted
 # 3D_Pongbreaker
 #
-# FUTURE IMPROVEMENTS
+# IMPROVEMENTS
+# position first
 
 import pygame
 
-from CONSTANTS import *
+from CONSTANTS import BRICK_WIDTH
+from CONSTANTS import BRICK_HEIGHT
+from CONSTANTS import BRICK_COLORS
+from CONSTANTS import BRICK_ALPHA
 
 class Brick(pygame.sprite.Sprite):
 	def __init__(self, color, topleft_or_center, pos_ind, z_pos, gs):

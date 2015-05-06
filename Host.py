@@ -3,6 +3,10 @@
 # CSE30332
 # Final Project: PyGame + Twisted
 # 3D_Pongbreaker
+#
+# IMPROVEMENTS
+# Make make tuples more clear in Pickle (dicts?)
+# Kill nicely
 
 import cPickle as pickle
 import sys
@@ -29,11 +33,7 @@ class Host_Protocol(Protocol):
 			(mouse_x, mouse_y, launch_paddle_2) = data.split(',')
 			self.gs.paddle_2.manual_x = int(mouse_x)
 			self.gs.paddle_2.manual_y = int(mouse_y)
-			launch_paddle_2 = int(launch_paddle_2)
-			if launch_paddle_2:
-				self.gs.paddle_2.launch = True
-			else:
-				self.gs.paddle_2.launch = False
+			self.gs.paddle_2.launch = bool(int(launch_paddle_2))
 		except:
 			pass
 
@@ -59,8 +59,7 @@ class Host_Protocol(Protocol):
 		self.transport.write(pickled_objects)
 
 	def connectionLost(self, reason):
-		print 'Connection to client lost:', reason
-		sys.exit
+		sys.exit("Connection to client lost: {0}".format(reason))
 
 class Host_Factory(ServerFactory):
 	def buildProtocol(self, addr):

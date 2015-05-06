@@ -9,7 +9,12 @@
 
 import pygame
 
-from CONSTANTS import *
+from CONSTANTS import PADDLE_WIDTH
+from CONSTANTS import PADDLE_HEIGHT
+from CONSTANTS import PADDLE_COLOR
+from CONSTANTS import PADDLE_ALPHA
+from CONSTANTS import SCREEN_CENTER_X
+from CONSTANTS import SCREEN_CENTER_Y
 
 class Paddle(pygame.sprite.Sprite):
 	def __init__(self, z_pos, owner, gs):
@@ -24,9 +29,9 @@ class Paddle(pygame.sprite.Sprite):
 		self.z_pos = z_pos
 		self.old_x_pos = int()
 		self.old_y_pos = int()
-		self.owner = owner
 		self.manual_x = 400
 		self.manual_y = 400
+		self.owner = owner # {host, client}
 		self.launch = False
 		self.score = 0
 

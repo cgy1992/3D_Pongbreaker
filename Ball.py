@@ -4,7 +4,7 @@
 # Final Project: PyGame + Twisted
 # 3D_Pongbreaker
 #
-# FUTURE IMPROVEMENTS
+# IMPROVEMENTS
 # Decide on initial x and y velocity
 # Make an actual circle
 # Better paddle velocity transferral

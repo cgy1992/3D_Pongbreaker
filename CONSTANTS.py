@@ -47,7 +47,7 @@ BRICK_COLORS = {
 	'R': COLOR_RED,
 	'B': COLOR_BLUE
 }
-BRICK_ALPHA = 100
+BRICK_ALPHA = 200
 BRICK_POS_FN = './test_brick_pos.txt'
 
 # paddle
@@ -60,8 +60,6 @@ BRICK_VAL = 10 # points
 SCORE_VAL = 100 # points
 PADDLE_COLOR = COLOR_WHITE
 PADDLE_ALPHA = 100
-MAX_ON_PADDLE_FRAMES = 10 * FRAMERATE # seconds * frames/second = frames
-OUT_FRAMES = 2 * FRAMERATE # seconds * frames/second = frames
 
 # label
 TITLE_FONT_SIZE = 24
@@ -76,3 +74,5 @@ BALL_COLOR = COLOR_WHITE
 BALL_COLLIDE_COLOR = COLOR_GREEN
 BALL_OUT_COLOR = COLOR_RED
 BALL_COLLIDE_SOUND = './sounds/blip.wav'
+MAX_ON_PADDLE_FRAMES = 3 * FRAMERATE # seconds * frames/second = frames
+OUT_FRAMES = 3 * FRAMERATE # seconds * frames/second = frames

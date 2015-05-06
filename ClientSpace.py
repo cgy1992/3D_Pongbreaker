@@ -4,25 +4,48 @@
 # Final Project: PyGame + Twisted
 # 3D_Pongbreaker
 #
-# FUTURE IMPROVEMENTS
+# IMPROVEMENTS
+# Make make tuples more clear in Pickle (dicts?)
+# Make traces transparent
+
+import sys
 
 import pygame
-from pygame.locals import *
+from pygame.locals import QUIT
+from pygame.locals import MOUSEBUTTONDOWN
+from pygame.locals import MOUSEBUTTONUP
 
 from Paddle import Paddle
 from Brick import Brick
 from Ball import Ball
-from CONSTANTS import *
+
+from CONSTANTS import SCREEN_WIDTH
+from CONSTANTS import SCREEN_HEIGHT
+from CONSTANTS import PADDLE_BUFFER
+from CONSTANTS import HALLWAY_DEPTH
+from CONSTANTS import TITLE_FONT_SIZE
+from CONSTANTS import TEXT_COLOR
+from CONSTANTS import SCORE_FONT_SIZE
+from CONSTANTS import SCREEN_CENTER_X
+from CONSTANTS import SCREEN_CENTER_Y
+from CONSTANTS import HALLWAY_CENTER
+from CONSTANTS import WALL_TL
+from CONSTANTS import WALL_TR
+from CONSTANTS import WALL_BL
+from CONSTANTS import WALL_BR
+from CONSTANTS import HALLWAY_EDGE_COLOR
+from CONSTANTS import HALLWAY_EDGE_THICK
+from CONSTANTS import SCALING_FACTOR
 
 class ClientSpace:
 	def __init__(self):
-		# 1 -- initialization
+		# initialization
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
 		pygame.display.set_caption('3D Pongbreaker Client')
 
-		# 2 -- create static game objects
+		# create static game objects
 		self.background = self.create_background()
 		self.paddle_1 = Paddle((HALLWAY_DEPTH - PADDLE_BUFFER), 'not used', self)
 		self.paddle_2 = Paddle(PADDLE_BUFFER, 'not used', self)
@@ -36,25 +59,43 @@ class ClientSpace:
 		self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
 
 	def update_screen(self, pos_dict):
-		self.paddle_1.rect.center = ((self.reverse_x(pos_dict['p1'][0][0]), pos_dict['p1'][0][1]))
-		self.paddle_2.rect.center = ((self.reverse_x(pos_dict['p2'][0][0]), pos_dict['p2'][0][1]))
+		# handle exit user input
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				sys.exit()
+			elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+				self.paddle_2.launch = True
+			elif event.type == MOUSEBUTTONUP and event.button == 1:
+				self.paddle_2.launch = False
+
+		# update position of paddles
+		self.paddle_1.rect.center = ((self.rev_x(pos_dict['p1'][0][0]), pos_dict['p1'][0][1]))
+		self.paddle_2.rect.center = ((self.rev_x(pos_dict['p2'][0][0]), pos_dict['p2'][0][1]))
+		# update paddle scores
 		self.paddle_1.score = pos_dict['p1'][1]
 		self.paddle_2.score = pos_dict['p2'][1]
+		# reset and fill position of brick(s)
+		self.bricks = set()
 		for brick_pos in pos_dict['bricks']:
-			self.bricks.add(Brick(brick_pos[2], (self.reverse_x(brick_pos[0][0]), brick_pos[0][1]), 'center', self.reverse_z(brick_pos[1]), self))
+			self.bricks.add(Brick(brick_pos[2], (self.rev_x(brick_pos[0][0]), brick_pos[0][1]), 'center', self.rev_z(brick_pos[1]), self))
+		# reset and fill position of ball(s)
+		self.balls = set()
 		for ball_pos in pos_dict['balls']:
-			color = (int(ball_pos[2][0]), int(ball_pos[2][1]), int(ball_pos[2][2]))
-			self.balls.add(Ball((self.reverse_x(ball_pos[0][0]), ball_pos[0][1]), self.reverse_z(ball_pos[1]), 'not used', self, color))
+			color = ball_pos[2]
+			self.balls.add(Ball((self.rev_x(ball_pos[0][0]), ball_pos[0][1]), self.rev_z(ball_pos[1]), 'not used', self, ball_pos[2]))
 
-		# display game objects
+		# display background
 		self.screen.blit(self.background, (0, 0))
 
+		# display sprites
 		sprites = [self.paddle_1, self.paddle_2]
 		sprites.extend(self.bricks)
 		sprites.extend(self.balls)
 		sprites.sort(key=lambda sprite: sprite.z_pos, reverse=True)
 		for sprite in sprites:
 			self.blit_3D(sprite)
+
+		# display ball traces
 		for ball in self.balls:
 			self.display_ball_trace(ball)
 
@@ -76,30 +117,18 @@ class ClientSpace:
 
 		pygame.display.flip()
 
-		self.bricks = set()
-		self.balls = set()
-
-	def reverse_x(self, x):
+	def rev_x(self, x):
 		diff = x - SCREEN_CENTER_X
-		new_x = SCREEN_CENTER_X - diff
-		return new_x
+		return SCREEN_CENTER_X - diff
 
-	def reverse_z(self, z):
+	def rev_z(self, z):
 		diff = z - HALLWAY_CENTER
-		new_z = HALLWAY_CENTER - diff
-		return new_z
+		return HALLWAY_CENTER - diff
 
 	def get_mouse(self):
-		launch_paddle_2 = 0		# Assume button is not down
-		for event in pygame.event.get():
-			if event.type == MOUSEBUTTONDOWN:
-				launch_paddle_2 = 1
-			elif event.type == MOUSEBUTTONUP:
-				launch_paddle_2 = 0
 		(mx, my) = pygame.mouse.get_pos()
-		mx = self.reverse_x(mx)
-		return (mx, my, launch_paddle_2)
-	
+		return (self.rev_x(mx), my)
+
 	def create_background(self):
 		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 		# draw wall edges

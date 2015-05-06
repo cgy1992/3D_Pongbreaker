@@ -6,27 +6,47 @@
 #
 # FUTURE IMPROVEMENTS
 # Better ball launching (quick mouse clicks not detected)
+# Make traces transparent
 
 import sys
 
 import pygame
-from pygame.locals import *
+from pygame.locals import QUIT
+from pygame.locals import MOUSEBUTTONDOWN
+from pygame.locals import MOUSEBUTTONUP
 
 from Paddle import Paddle
 from BrickCreator import BrickCreator
 from Brick import Brick
 from Ball import Ball
-from CONSTANTS import *
+
+from CONSTANTS import SCREEN_WIDTH
+from CONSTANTS import SCREEN_HEIGHT
+from CONSTANTS import PADDLE_BUFFER
+from CONSTANTS import HALLWAY_DEPTH
+from CONSTANTS import BRICK_POS_FN
+from CONSTANTS import TITLE_FONT_SIZE
+from CONSTANTS import TEXT_COLOR
+from CONSTANTS import SCORE_FONT_SIZE
+from CONSTANTS import WALL_TL
+from CONSTANTS import WALL_TR
+from CONSTANTS import WALL_BL
+from CONSTANTS import WALL_BR
+from CONSTANTS import HALLWAY_EDGE_COLOR
+from CONSTANTS import HALLWAY_EDGE_THICK
+from CONSTANTS import SCALING_FACTOR
+from CONSTANTS import SCREEN_CENTER_X
+from CONSTANTS import SCREEN_CENTER_Y
 
 class GameSpace:
 	def __init__(self):
-		# 1 -- initialization
+		# initialization
 		pygame.init()
 		self.size = SCREEN_WIDTH, SCREEN_HEIGHT
 		self.screen = pygame.display.set_mode(self.size)
 		pygame.display.set_caption("3D Pongbreaker Host")
 
-		# 2 -- create game objects
+		# create game objects
 		self.background = self.create_background()
 		self.paddle_1 = Paddle(PADDLE_BUFFER, 'host', self)
 		self.paddle_2 = Paddle((HALLWAY_DEPTH - PADDLE_BUFFER), 'client', self)
@@ -42,31 +62,26 @@ class GameSpace:
 		self.paddle_2_title_rect = self.paddle_2_title_text.get_rect()
 		self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
 
-	# 3 -- game loop
 	def gameloop(self):
-		# 4 -- clock tick regulation (framerate)
-		# THIS IS NOW HANDLED BY TWISTED LIBRARY
-
-		# 5 -- handle user inputs
+		# handle user inputs
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				sys.exit()
 			elif event.type == MOUSEBUTTONDOWN and event.button == 1:
 				self.paddle_1.launch = True
-
 			elif event.type == MOUSEBUTTONUP and event.button == 1:
 				self.paddle_1.launch = False
 
-
-		# 6 -- tick/update game objects
+		# tick/update game objects
 		self.paddle_1.tick()
 		self.paddle_2.tick()
 		for ball in set(self.balls):
 			ball.tick()
 
-		# 7 -- display game objects
+		# display background
 		self.screen.blit(self.background, (0, 0))
 
+		# display sprites
 		sprites = [self.paddle_1, self.paddle_2]
 		sprites.extend(self.bricks)
 		sprites.extend(self.balls)
@@ -74,6 +89,7 @@ class GameSpace:
 		for sprite in sprites:
 			self.blit_3D(sprite)
 
+		# display ball traces
 		for ball in self.balls:
 			self.display_ball_trace(ball)
 
@@ -87,14 +103,13 @@ class GameSpace:
 		paddle_2_score_rect.bottomright = (SCREEN_WIDTH, SCREEN_HEIGHT)
 		self.paddle_1_title_rect.bottomleft = paddle_1_score_rect.topleft
 		self.paddle_2_title_rect.bottomright = paddle_2_score_rect.topright
-		# blit titles and scores
+		# display titles and scores
 		self.screen.blit(self.paddle_1_title_text, self.paddle_1_title_rect)
 		self.screen.blit(self.paddle_2_title_text, self.paddle_2_title_rect)
 		self.screen.blit(paddle_1_score_text, paddle_1_score_rect)
 		self.screen.blit(paddle_2_score_text, paddle_2_score_rect)
 
 		pygame.display.flip()
-
 
 	def create_background(self):
 		background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -108,7 +123,7 @@ class GameSpace:
 		pygame.draw.polygon(background, HALLWAY_EDGE_COLOR, back_wall_pl, HALLWAY_EDGE_THICK)
 
 		return background
-		
+
 	def blit_3D(self, sprite):
 		scale = pow(SCALING_FACTOR, sprite.z_pos)
 		# resize image
