@@ -66,6 +66,7 @@ class Ball(pygame.sprite.Sprite):
 				self.z_vel = -BALL_INIT_VEL
 			self.state = 'in play'
 		elif self.state == 'in play':
+			self.image.fill(BALL_COLOR)
 			# regenerate and update score if ball leaves hallway on player 1 side
 			if self.z_pos < 0:
 				self.gs.paddle_2.score += SCORE_VAL
@@ -85,6 +86,7 @@ class Ball(pygame.sprite.Sprite):
 				self.y_vel *= -1
 			# reverse z-direction, adjust x- and y- velocity, and update last hit if ball is touching (or will touch) either paddle
 			if self.colliderect_3D(self.gs.paddle_1):
+				self.image.fill(BALL_PADDLE_COLLIDE_COLOR)
 				# reverse z-direction
 				self.z_vel *= -1
 				# add partial velocity of paddle
@@ -94,6 +96,7 @@ class Ball(pygame.sprite.Sprite):
 				# update last hit
 				self.last_hit = 1
 			elif self.colliderect_3D(self.gs.paddle_2):
+				self.image.fill(BALL_PADDLE_COLLIDE_COLOR)
 				# reverse z-direction
 				self.z_vel *= -1
 				# add partial velocity of paddle
