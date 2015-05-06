@@ -15,8 +15,8 @@ COLOR_GREEN = (0,   255, 0)
 COLOR_BLUE =  (0,   0,   175)
 
 # screen
-SCREEN_WIDTH = 800  # pixels
-SCREEN_HEIGHT = 800 # pixels
+SCREEN_WIDTH = 600  # pixels
+SCREEN_HEIGHT = 600 # pixels
 SCREEN_CENTER_X = SCREEN_WIDTH / 2 # pixels
 SCREEN_CENTER_Y = SCREEN_HEIGHT / 2 # pixels
 SCALING_FACTOR = 0.9995 # 'a' in 'y = a^x', where x is distance from screen (pixels) and y is scaling factor

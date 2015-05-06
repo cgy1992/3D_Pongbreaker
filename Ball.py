@@ -53,6 +53,10 @@ class Ball(pygame.sprite.Sprite):
 			elif self.n_on_paddle_frames > MAX_ON_PADDLE_FRAMES:
 				self.state = 'launch'
 		elif self.state == 'launch':
+			# Play launch sound
+			pygame.mixer.music.load("./sounds/blip.wav")
+			pygame.mixer.music.play()
+
 			# set initial x-, y-, and z-velocity
 			self.x_vel = 0.5 * BALL_INIT_VEL
 			self.y_vel = 0.75 * BALL_INIT_VEL
