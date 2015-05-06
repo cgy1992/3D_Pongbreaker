@@ -1,0 +1,53 @@
+3D Pong Breaker
+README
+Tim Pusateri & Jon Richelsen
+4/7/15
+
+	Welcome to 3D Pong Breaker! This game combines 3D Pong and 
+Brick Breaker. The objective of the game is to gain as many points as
+possible and have a higher score than your opponent at the end of game-
+play.
+	To begin play, player 1 must act as a host and launch a hosting program
+for player 2 to connect to. A few specifications must be made in various
+program files in order for the game to run correctly. Firstly,
+the CONSTANTS.py must contain the same data for both players. The data itself
+can be configured if needed, so long as both players have the same data. The most
+likely case in which this would be necessary is if the players' computer
+screens can not fit the game window. Changing the SCREEN_WIDTH and SCREEN_HEIGHT
+variable at the top of this file can solve this problem. We recommend the standard
+600x600 size as is specified in the standard files. The other important configurations
+will be estalishing the hosting port and the corresponding client connection address
+and port. To do this follow the steps below:
+	1)  In Host.py, locate the line at the bottom of the file that reads 
+		"reactor.listenTCP(9313, Host_Factory())" and change the hosting port to
+		a number of your choice (that is the '9313' number in the example above).
+	2)  In Client.py, locate the line at the bottom of the file that reads
+		"reactor.connectTCP('localhost', 9313, Client_Factory())" and change the
+		the text between the singe quote marks to the hosting address ('localhost'
+		in this example). Similarly, change the hosting port to the number specified
+		in Host.py from step 1.
+
+	Now you're ready to play! On the hosting computer, simply type "python2.6 Host.py"
+at the command line. Your computer will now be waiting for player 2 to connect on the
+client computer. Player 2 will then type "python2.6 Client.py" at his command line, and
+play will begin.
+	Each player will begin with the view of a 3D hallway with a wall of transparent bricks
+which strangly resembles a checkerboard in the middle of the hallway. Each player will
+also notice his paddle that begins with a ball on it. Players can launch their ball
+by clicking the mouse or waiting approximately 8 seconds for the ball to launch on its
+own. Follow the ball's green outline to determine where it is in the hallway, and try to
+break as many bricks as you can! Use your mouse to position your paddle so that it hits
+the ball away from you. You will also notice your opponent's gameplay occuring at
+the opposite end of the hallway. If a ball passes through holes in the wall on either side,
+it is fair play for the other player to use. But watch out! If a player lets a ball pass
+behind them, the other player will gain points and a new ball will regenerate on the opponent's 
+paddle. If you notice a ball lights up red, it means the ball has passed beyond a player's 
+paddle. If you notice a ball lights up green, it means the ball has either collided with 
+a brick and it will disappear, or with a paddle in which case it will bounce off. Lastly,
+keep in mind that the ball will aquire the velocity and direction from the paddle that
+hit it. Use this to your advantage!
+	To end the game, the host must type "ctrl-c" at the command line. This will kill 
+player 2's game, but he must also type "ctrl-c" at the command line to close his game
+window.
+
+Have fun!
